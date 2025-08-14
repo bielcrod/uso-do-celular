@@ -188,6 +188,23 @@
             border-radius: 0 var(--radius) var(--radius) 0;
             margin: 20px 0;
             text-align: left;
+            line-height: 1.6;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+        }
+
+        .message-box p {
+            margin-bottom: 0;
+            width: 100%;
+        }
+
+        .message-box ul {
+            margin-top: 12px;
+        }
+
+        .message-box li {
+            margin-bottom: 10px;
         }
 
         .message-box a {
@@ -249,40 +266,68 @@
             animation: pulse 1.5s infinite;
         }
 
-        /* Novas Animações */
+        /* Animações Aprimoradas */
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-15px) rotate(-2deg); }
+            75% { transform: translateY(-10px) rotate(2deg); }
         }
+        
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 0.9; }
             100% { transform: scale(1); opacity: 1; }
         }
+        
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
+        
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
+        
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
+        
         @keyframes typing {
             0% { transform: scaleY(1); }
-            50% { transform: scaleY(0.5); }
+            50% { transform: scaleY(0.6); }
             100% { transform: scaleY(1); }
         }
+        
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+        
+        @keyframes drip {
+            0% { transform: translateY(0) scaleY(0.8); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(30px) scaleY(1); opacity: 0; }
+        }
+        
+        @keyframes fly {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(5px) translateY(-5px); }
+            50% { transform: translateX(10px) translateY(0); }
+            75% { transform: translateX(5px) translateY(5px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
 
-        /* Novos Componentes */
+        /* Componentes Animados */
         .food-bubble {
             position: absolute;
             width: 40px;
@@ -291,19 +336,24 @@
             opacity: 0;
             animation: float 3s infinite;
         }
+        
         .sweat-drop {
             position: absolute;
             width: 15px;
             height: 15px;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 15"><path d="M5 0 Q7 5 5 10 Q3 5 5 0" fill="%2366B3FF"/></svg>');
             opacity: 0;
+            animation: drip 1.5s infinite;
         }
+        
         .zzz {
             position: absolute;
             font-size: 20px;
             color: #999;
             opacity: 0;
+            animation: float 2s infinite;
         }
+        
         .aura {
             position: absolute;
             width: 120%;
@@ -311,7 +361,9 @@
             border-radius: 50%;
             background: radial-gradient(circle, rgba(100,255,100,0.3) 0%, rgba(100,255,100,0) 70%);
             opacity: 0;
+            animation: pulse 3s infinite;
         }
+        
         .typing-finger {
             position: absolute;
             width: 10px;
@@ -319,7 +371,9 @@
             background-color: #FFD700;
             border-radius: 5px;
             opacity: 0;
+            animation: typing 0.5s infinite, fadeIn 1s forwards;
         }
+        
         .notification {
             position: absolute;
             width: 15px;
@@ -327,13 +381,20 @@
             background-color: #F44336;
             border-radius: 50%;
             opacity: 0;
+            animation: bounce 1s infinite, fadeIn 1s forwards;
         }
+        
         .bird {
             position: absolute;
             width: 30px;
             height: 20px;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20"><path d="M0,10 Q15,-10 30,10 Q15,30 0,10" fill="%23333"/></svg>');
             opacity: 0;
+            animation: fly 3s infinite;
+        }
+        
+        .screen-transition {
+            animation: fadeIn 0.8s ease-out;
         }
 
         /* Telas Específicas */
@@ -351,6 +412,7 @@
             font-size: 28px;
             margin-bottom: 16px;
             color: var(--primary);
+            animation: fadeIn 1s ease-out;
         }
 
         #screen-start p {
@@ -358,10 +420,12 @@
             color: var(--text-light);
             margin-bottom: 32px;
             max-width: 400px;
+            animation: fadeIn 1.2s ease-out;
         }
 
         #screen-start .btn {
             margin-top: 24px;
+            animation: fadeIn 1.5s ease-out, pulse 2s infinite 1.5s;
         }
 
         .screen-title {
@@ -369,6 +433,7 @@
             margin-bottom: 16px;
             color: var(--primary);
             text-align: center;
+            animation: fadeIn 0.8s ease-out;
         }
 
         .screen-subtitle {
@@ -376,10 +441,14 @@
             color: var(--text-light);
             margin-bottom: 24px;
             text-align: center;
+            animation: fadeIn 1s ease-out;
         }
 
         #screen-end {
             text-align: center;
+            padding-bottom: 120px;
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
         }
 
         #screen-end ul {
@@ -395,6 +464,7 @@
 
         .social-links {
             margin: 24px 0;
+            animation: fadeIn 1s ease-out;
         }
 
         .social-links a {
@@ -409,11 +479,21 @@
             margin: 0 8px;
             text-decoration: none;
             transition: var(--transition);
+            animation: bounce 0.8s ease;
         }
 
         .social-links a:hover {
             transform: translateY(-3px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-buttons {
+            position: sticky;
+            bottom: 20px;
+            background: var(--card-bg);
+            padding: 15px 0;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-out;
         }
 
         /* Efeitos de Tempo de Tela */
@@ -422,6 +502,7 @@
             font-weight: 600;
             margin: 12px 0;
             color: var(--text);
+            animation: fadeIn 0.5s ease-out;
         }
 
         /* Responsividade */
@@ -434,6 +515,20 @@
                 width: calc(100% - 30px);
                 left: 15px;
                 padding: 20px;
+            }
+
+            #screen-end {
+                padding: 20px 15px 140px;
+            }
+
+            .message-box {
+                padding: 12px;
+                min-height: 150px;
+            }
+
+            .social-links {
+                margin: 30px 0;
+                padding-bottom: 20px;
             }
 
             .btn {
@@ -459,6 +554,10 @@
             .character-container {
                 width: 160px;
                 height: 160px;
+            }
+            
+            .message-box {
+                min-height: 180px;
             }
         }
     </style>
@@ -497,7 +596,7 @@
             <button id="add-time-1" class="btn">+ 30 minutos</button>
             
             <div class="message-box" id="message-1">
-                <p>Clique no botão para começar a simulação.</p>
+                <p>Clique no botão para simular o tempo que você passa no celular. Cada clique adiciona 30 minutos de uso.</p>
             </div>
         </div>
 
@@ -531,7 +630,7 @@
             <button id="add-time-2" class="btn">+ 30 minutos</button>
             
             <div class="message-box" id="message-2">
-                <p>Vamos ver como o tempo de tela afeta a saúde mental.</p>
+                <p>Agora vamos ver como o tempo de tela afeta sua saúde mental. Continue clicando para simular mais tempo no celular.</p>
             </div>
         </div>
 
@@ -561,7 +660,7 @@
             <button id="add-time-3" class="btn">+ 30 minutos</button>
             
             <div class="message-box" id="message-3">
-                <p>Observe como as relações sociais são afetadas.</p>
+                <p>Observe como suas relações sociais são afetadas pelo tempo excessivo no celular. As interações reais estão sendo substituídas pelas virtuais.</p>
             </div>
         </div>
 
@@ -593,7 +692,7 @@
             <button id="add-time-4" class="btn">+ 30 minutos</button>
             
             <div class="message-box" id="message-4">
-                <p>Seus olhos e seu sono estão em risco.</p>
+                <p>Agora vamos ver os efeitos na sua saúde física. O uso excessivo do celular afeta seus olhos, postura e padrões de sono.</p>
             </div>
         </div>
 
@@ -613,7 +712,7 @@
             <button id="disconnect-btn" class="btn btn-secondary">Desconectar por 3 dias</button>
             
             <div class="message-box" id="message-final">
-                <p>Experimente ficar sem celular e observe as mudanças.</p>
+                <p>Você está pronto para experimentar os benefícios de se desconectar? Mesmo uma pequena pausa pode fazer uma grande diferença.</p>
             </div>
         </div>
 
@@ -646,7 +745,9 @@
                 </a>
             </div>
             
-            <button id="restart-btn" class="btn">Refazer Teste</button>
+            <div class="action-buttons">
+                <button id="restart-btn" class="btn">Refazer Teste</button>
+            </div>
         </div>
 
         <!-- Indicador de Som -->
@@ -673,8 +774,9 @@
         // Configurações Globais
         const config = {
             soundEnabled: true,
-            animationSpeed: 0.5,
-            debugMode: false
+            animationSpeed: 0.8,
+            debugMode: false,
+            waitingForClick: false
         };
 
         // Estado do Jogo
@@ -916,28 +1018,28 @@
         // Mensagens do Jogo (com links atualizados)
         const messages = {
             start: [
-                "Clique no botão para começar a simulação.",
-                "1 hora: Cuidado! O tempo está aumentando...",
-                `2 horas: <strong>No Canadá, jovens com +2h/dia de tela têm o DOBRO de risco de obesidade!</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank">(Estudo canadense)</a>`
+                "Clique no botão para simular o tempo que você passa no celular. Cada clique adiciona 30 minutos de uso.",
+                "1 hora: Você já está passando tempo demais no celular! Estudos mostram que o uso excessivo pode levar a hábitos alimentares pouco saudáveis.",
+                `2 horas: <strong>Alerta vermelho!</strong> Pesquisas no Canadá mostram que jovens com mais de 2 horas por dia de tempo de tela têm o DOBRO de risco de desenvolver obesidade! O tempo passivo no celular reduz a atividade física e aumenta o consumo de alimentos pouco saudáveis. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank">(Estudo canadense)</a>`
             ],
             stress: [
-                "Vamos ver como o tempo de tela afeta a saúde mental.",
-                "3 horas: Seu nível de estresse está subindo...",
-                `4 horas: <strong>Na Coreia do Sul, +4h/dia aumenta ideação suicida e uso de drogas!</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank">(Pesquisa coreana)</a>`
+                "Agora vamos ver como o tempo de tela afeta sua saúde mental. Continue clicando para simular mais tempo no celular.",
+                "3 horas: Você está começando a sentir os efeitos? O uso excessivo de smartphones está ligado ao aumento dos níveis de cortisol, o hormônio do estresse.",
+                `4 horas: <strong>Dados alarmantes!</strong> Uma pesquisa na Coreia do Sul com mais de 50.000 adolescentes descobriu que aqueles que usam smartphones por mais de 4 horas por dia têm taxas significativamente maiores de ideação suicida, estresse e uso de substâncias. O isolamento digital pode ser tão prejudicial quanto o físico. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank">(Pesquisa coreana)</a>`
             ],
             isolation: [
-                "Observe como as relações sociais são afetadas.",
-                "5 horas: Seus amigos estão se afastando...",
-                `6 horas: <strong>Uso excessivo reduz qualidade de vida física e social!</strong> <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank">(Estudo Diário do Povo)</a>`
+                "Observe como suas relações sociais são afetadas pelo tempo excessivo no celular. As interações reais estão sendo substituídas pelas virtuais.",
+                "5 horas: Seus amigos e familiares estão começando a se afastar. A comunicação digital não substitui o contato humano face a face.",
+                `6 horas: <strong>Impacto social comprovado!</strong> Estudos brasileiros mostram que o uso excessivo do celular reduz a qualidade de vida em múltiplos aspectos, incluindo as relações sociais e a saúde física. O tempo que você passa olhando para a tela é tempo que não está investindo em relações significativas. <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank">(Estudo Diário do Povo)</a>`
             ],
             health: [
-                "Seus olhos e seu sono estão em risco.",
-                "7 horas: Seus olhos estão ficando cansados...",
-                `8 horas: <strong>Cada hora de tela/dia aumenta em 21% o risco de miopia em crianças!</strong> <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank">(Estudo Health.com)</a>`
+                "Agora vamos ver os efeitos na sua saúde física. O uso excessivo do celular afeta seus olhos, postura e padrões de sono.",
+                "7 horas: Seus olhos estão ficando cansados e secos. A luz azul das telas pode estar perturbando seu ritmo circadiano.",
+                `8 horas: <strong>Problemas visuais em ascensão!</strong> Cada hora adicional de tempo de tela por dia aumenta em 21% o risco de desenvolver miopia em crianças e adolescentes. Além disso, o uso noturno de smartphones está diretamente ligado à má qualidade do sono, que por sua vez afeta todos os aspectos da saúde. <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank">(Estudo Health.com)</a>`
             ],
             disconnect: [
-                "Experimente ficar sem celular e observe as mudanças.",
-                `3 dias sem celular podem <strong>reorganizar seu cérebro</strong> (sistema de dopamina e serotonina)! <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank">(NY Post)</a>`
+                "Você está pronto para experimentar os benefícios de se desconectar? Mesmo uma pequena pausa pode fazer uma grande diferença.",
+                `3 dias sem celular: <strong>Transformação impressionante!</strong> Pesquisas mostram que apenas 2 semanas reduzindo o uso de smartphones podem reorganizar seu cérebro, reequilibrando os sistemas de dopamina e serotonina. Os participantes relatam melhor humor, menos ansiedade e mais produtividade. Que tal tentar? <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank">(NY Post)</a>`
             ]
         };
 
@@ -946,12 +1048,12 @@
             // Event Listeners
             dom.startBtn.addEventListener("click", startGame);
             dom.restartBtn.addEventListener("click", resetGame);
-            dom.disconnectBtn.addEventListener("click", showFinalResults);
+            dom.disconnectBtn.addEventListener("click", handleDisconnect);
             dom.soundToggle.addEventListener("click", toggleSound);
 
             // Botões de adicionar tempo
             dom.addTimeBtns.forEach((btn, index) => {
-                btn.addEventListener("click", () => addTime(index));
+                btn.addEventListener("click", () => handleAddTime(index));
             });
 
             // Inicializar personagens e elementos
@@ -999,9 +1101,27 @@
             resetAnimations();
             updateGameState();
             showScreen(0);
+            
+            // Resetar todos os botões
+            dom.addTimeBtns.forEach(btn => {
+                btn.textContent = "+ 30 minutos";
+                btn.disabled = false;
+            });
+            
+            dom.disconnectBtn.textContent = "Desconectar por 3 dias";
+            dom.disconnectBtn.disabled = false;
+            config.waitingForClick = false;
         }
 
-        function addTime(phaseIndex) {
+        function handleAddTime(phaseIndex) {
+            if (config.waitingForClick) {
+                // Se estiver esperando confirmação, avança para próxima fase
+                config.waitingForClick = false;
+                dom.addTimeBtns[phaseIndex].textContent = "+ 30 minutos";
+                checkPhaseTransition(phaseIndex);
+                return;
+            }
+            
             playSound('click');
             gameState.time += 0.5; // +30min
             
@@ -1009,10 +1129,39 @@
             updateProgress();
             updateTimeDisplay();
             updateAnimations(phaseIndex);
-            updateMessages(phaseIndex);
             
-            // Verificar se deve avançar para próxima fase
-            checkPhaseTransition(phaseIndex);
+            // Verificar se deve mostrar mensagem importante
+            const importantTimes = [2, 4, 6, 8];
+            if (importantTimes.includes(gameState.time)) {
+                updateMessages(phaseIndex);
+                config.waitingForClick = true;
+                
+                // Mudar texto do botão
+                dom.addTimeBtns[phaseIndex].textContent = "Continuar";
+            } else {
+                updateMessages(phaseIndex);
+            }
+        }
+
+        function handleDisconnect() {
+            if (config.waitingForClick) {
+                // Segundo clique - mostrar resultados
+                showScreen(6);
+                config.waitingForClick = false;
+                return;
+            }
+            
+            playSound('positive');
+            dom.messageBoxes[4].innerHTML = `<p>${messages.disconnect[1]}</p>`;
+            
+            // Ativar efeitos positivos
+            dom.positiveAura.style.animation = "fadeIn 1s forwards, pulse 2s infinite";
+            dom.bird1.style.animation = "fadeIn 1s forwards, float 3s infinite";
+            dom.bird2.style.animation = "fadeIn 1s 0.5s forwards, float 3s infinite 0.5s";
+            
+            // Mudar o botão para exigir confirmação
+            dom.disconnectBtn.textContent = "Ver Resultados";
+            config.waitingForClick = true;
         }
 
         function showScreen(screenIndex) {
@@ -1022,13 +1171,21 @@
             });
             
             // Mostrar tela atual
-            document.getElementById(gameState.screens[screenIndex]).classList.add('active');
+            const currentScreen = document.getElementById(gameState.screens[screenIndex]);
+            currentScreen.classList.add('active');
+            currentScreen.classList.add('screen-transition');
+            
             gameState.currentScreen = screenIndex;
             
             // Efeito visual ao mudar de tela
             if (screenIndex > 0) {
                 playSound('notification');
             }
+            
+            // Remover classe de transição após animação
+            setTimeout(() => {
+                currentScreen.classList.remove('screen-transition');
+            }, 800);
         }
 
         function updateProgress() {
@@ -1073,8 +1230,8 @@
                 case 1: // Fase 2 - Estresse
                     if (gameState.time >= 3) {
                         // Ativar gotas de suor
-                        dom.sweat1.style.animation = "fadeIn 1s forwards";
-                        dom.sweat2.style.animation = "fadeIn 1s 0.3s forwards";
+                        dom.sweat1.style.animation = "fadeIn 1s forwards, drip 1.5s infinite";
+                        dom.sweat2.style.animation = "fadeIn 1s 0.3s forwards, drip 1.5s infinite 0.3s";
                         dom.stressEffect.style.background = "rgba(255,0,0,0.1)";
                         // Ativar dedo digitando
                         dom.typingFinger.style.animation = "typing 0.5s infinite, fadeIn 1s forwards";
@@ -1116,6 +1273,7 @@
                     if (gameState.time >= 7) {
                         // Óculos aparecem
                         dom.glasses.style.opacity = "0.7";
+                        dom.glasses.style.animation = "fadeIn 1s forwards, wobble 2s infinite";
                         // Efeito de sono
                         dom.sleepEffect.style.opacity = "1";
                         dom.sleepEffect.style.top = "40px";
@@ -1139,50 +1297,41 @@
 
         function updateMessages(phaseIndex) {
             let messageIndex;
+            let messagesToUse;
             
             if (phaseIndex === 0) {
-                // Fase 1: Obesidade
+                messagesToUse = messages.start;
                 messageIndex = gameState.time >= 2 ? 2 : gameState.time >= 1 ? 1 : 0;
-                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.start[messageIndex]}</p>`;
             } else if (phaseIndex === 1) {
-                // Fase 2: Estresse
+                messagesToUse = messages.stress;
                 messageIndex = gameState.time >= 4 ? 2 : gameState.time >= 3 ? 1 : 0;
-                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.stress[messageIndex]}</p>`;
             } else if (phaseIndex === 2) {
-                // Fase 3: Isolamento
+                messagesToUse = messages.isolation;
                 messageIndex = gameState.time >= 6 ? 2 : gameState.time >= 5 ? 1 : 0;
-                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.isolation[messageIndex]}</p>`;
             } else if (phaseIndex === 3) {
-                // Fase 4: Saúde Física
+                messagesToUse = messages.health;
                 messageIndex = gameState.time >= 8 ? 2 : gameState.time >= 7 ? 1 : 0;
-                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.health[messageIndex]}</p>`;
             }
+            
+            // Efeito de fade out e fade in para a mensagem
+            const messageBox = dom.messageBoxes[phaseIndex];
+            messageBox.style.animation = 'none';
+            void messageBox.offsetWidth; // Trigger reflow
+            messageBox.style.animation = 'fadeIn 0.8s ease-out';
+            
+            messageBox.innerHTML = `<p>${messagesToUse[messageIndex]}</p>`;
         }
 
         function checkPhaseTransition(phaseIndex) {
             if (phaseIndex === 0 && gameState.time >= 2) {
-                setTimeout(() => showScreen(2), 1500);
+                setTimeout(() => showScreen(2), 500);
             } else if (phaseIndex === 1 && gameState.time >= 4) {
-                setTimeout(() => showScreen(3), 1500);
+                setTimeout(() => showScreen(3), 500);
             } else if (phaseIndex === 2 && gameState.time >= 6) {
-                setTimeout(() => showScreen(4), 1500);
+                setTimeout(() => showScreen(4), 500);
             } else if (phaseIndex === 3 && gameState.time >= 8) {
-                setTimeout(() => showScreen(5), 1500);
+                setTimeout(() => showScreen(5), 500);
             }
-        }
-
-        function showFinalResults() {
-            playSound('positive');
-            dom.messageBoxes[4].innerHTML = `<p>${messages.disconnect[1]}</p>`;
-            
-            // Ativar efeitos positivos
-            dom.positiveAura.style.animation = "fadeIn 1s forwards, pulse 2s infinite";
-            dom.bird1.style.animation = "fadeIn 1s forwards, float 3s infinite";
-            dom.bird2.style.animation = "fadeIn 1s 0.5s forwards, float 3s infinite 0.5s";
-            
-            setTimeout(() => {
-                showScreen(6);
-            }, 2500);
         }
 
         function resetAnimations() {
@@ -1200,10 +1349,12 @@
             dom.friend2.style.right = "50px";
             dom.friend2.style.opacity = "1";
             dom.glasses.style.opacity = "0";
+            dom.glasses.style.animation = "none";
             dom.sleepEffect.style.opacity = "0";
             dom.sleepEffect.classList.remove('blink');
             dom.loneliness.style.opacity = "0";
             dom.positiveAura.style.opacity = "0";
+            dom.positiveAura.style.animation = "none";
             
             // Resetar elementos animados
             [dom.food1, dom.food2, dom.sweat1, dom.sweat2, dom.typingFinger, 
@@ -1277,6 +1428,4 @@
         document.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
-
 </html>
-
