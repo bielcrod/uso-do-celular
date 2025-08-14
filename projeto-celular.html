@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Teste: Seu Uso do Celular é Saudável?</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <style>
+        /* Reset e Estilos Base */
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary: #2196F3;
+            --danger: #F44336;
+            --warning: #FFC107;
+            --text: #333333;
+            --text-light: #757575;
+            --bg: #f5f5f5;
+            --card-bg: #FFFFFF;
+            --progress-bg: #E0E0E0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        #app {
+            max-width: 100%;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Componentes Reutilizáveis */
+        .screen {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            position: absolute;
+            width: calc(100% - 40px);
+            top: 20px;
+            left: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            z-index: 1;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+            z-index: 2;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+            margin: 12px 0;
+            width: 100%;
+            max-width: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover, .btn:focus {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-secondary:hover, .btn-secondary:focus {
+            background-color: #1976D2;
+            box-shadow: 0 6px 12px rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-warning:hover, .btn-warning:focus {
+            background-color: #FFB300;
+            box-shadow: 0 6px 12px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+        }
+
+        .btn-danger:hover, .btn-danger:focus {
+            background-color: #D32F2F;
+            box-shadow: 0 6px 12px rgba(244, 67, 54, 0.4);
+        }
+
+        .progress-container {
+            width: 100%;
+            margin: 24px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .progress-bar {
+            height: 12px;
+            background-color: var(--progress-bg);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), #8BC34A);
+            border-radius: 6px;
+            transition: width 0.5s ease-out;
+        }
+
+        .character-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 24px;
+        }
+
+        .character {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .message-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .message-box a {
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .message-box a:hover {
+            text-decoration: underline;
+        }
+
+        .friend {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 2;
+        }
+
+        .glasses {
+            position: absolute;
+            width: 120px;
+            height: 50px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50"><path d="M20,25 Q50,5 80,25" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="25" r="18" fill="none" stroke="%23333" stroke-width="2"/><circle cx="90" cy="25" r="18" fill="none" stroke="%23333" stroke-width="2"/></svg>');
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+
+        .sleep-effect {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M5,15 Q15,5 25,15" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round"/><path d="M5,20 Q15,10 25,20" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round"/></svg>');
+            background-repeat: no-repeat;
+            opacity: 0;
+            z-index: 3;
+        }
+
+        .stress-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 0, 0, 0);
+            transition: background 0.5s ease;
+            z-index: 0;
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Novas Animações */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes typing {
+            0% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+            100% { transform: scaleY(1); }
+        }
+
+        /* Novos Componentes */
+        .food-bubble {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            opacity: 0;
+            animation: float 3s infinite;
+        }
+        .sweat-drop {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 15"><path d="M5 0 Q7 5 5 10 Q3 5 5 0" fill="%2366B3FF"/></svg>');
+            opacity: 0;
+        }
+        .zzz {
+            position: absolute;
+            font-size: 20px;
+            color: #999;
+            opacity: 0;
+        }
+        .aura {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(100,255,100,0.3) 0%, rgba(100,255,100,0) 70%);
+            opacity: 0;
+        }
+        .typing-finger {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background-color: #FFD700;
+            border-radius: 5px;
+            opacity: 0;
+        }
+        .notification {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #F44336;
+            border-radius: 50%;
+            opacity: 0;
+        }
+        .bird {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20"><path d="M0,10 Q15,-10 30,10 Q15,30 0,10" fill="%23333"/></svg>');
+            opacity: 0;
+        }
+
+        /* Telas Específicas */
+        #screen-start {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 40px);
+            padding: 40px 24px;
+        }
+
+        #screen-start h1 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        #screen-start p {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 32px;
+            max-width: 400px;
+        }
+
+        #screen-start .btn {
+            margin-top: 24px;
+        }
+
+        .screen-title {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .screen-subtitle {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        #screen-end {
+            text-align: center;
+        }
+
+        #screen-end ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        #screen-end li {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .social-links {
+            margin: 24px 0;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 8px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Efeitos de Tempo de Tela */
+        .time-display {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 12px 0;
+            color: var(--text);
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            #app {
+                padding: 15px;
+            }
+
+            .screen {
+                width: calc(100% - 30px);
+                left: 15px;
+                padding: 20px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                font-size: 15px;
+            }
+
+            .character-container {
+                width: 180px;
+                height: 180px;
+            }
+
+            .screen-title {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .screen {
+                padding: 16px;
+            }
+
+            .character-container {
+                width: 160px;
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Tela Inicial -->
+        <div id="screen-start" class="screen active">
+            <h1>Seu celular está te ajudando ou prejudicando?</h1>
+            <p>Um jogo interativo baseado em pesquisas científicas sobre o uso de smartphones</p>
+            <button id="start-btn" class="btn pulse">Começar o Teste</button>
+        </div>
+
+        <!-- Fase 1: Obesidade -->
+        <div id="screen-1" class="screen">
+            <h2 class="screen-title">Tempo de Tela e Obesidade</h2>
+            <p class="screen-subtitle">Clique no botão para simular o tempo no celular:</p>
+            
+            <div class="character-container">
+                <div class="character" id="character-1"></div>
+                <!-- Bolhas de comida -->
+                <div class="food-bubble" id="food1" style="left: 30px; top: 20px;"></div>
+                <div class="food-bubble" id="food2" style="right: 30px; top: 10px;"></div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Tempo de tela</span>
+                    <span id="time-display-1">0 horas</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-1"></div>
+                </div>
+            </div>
+            
+            <button id="add-time-1" class="btn">+ 30 minutos</button>
+            
+            <div class="message-box" id="message-1">
+                <p>Clique no botão para começar a simulação.</p>
+            </div>
+        </div>
+
+        <!-- Fase 2: Estresse -->
+        <div id="screen-2" class="screen">
+            <h2 class="screen-title">Saúde Mental</h2>
+            <p class="screen-subtitle">Continue clicando para ver os efeitos do excesso de tela:</p>
+            
+            <div class="character-container">
+                <div class="stress-effect" id="stress-effect"></div>
+                <div class="character" id="character-2"></div>
+                <!-- Gotas de suor -->
+                <div class="sweat-drop" id="sweat1" style="left: 60px; top: 40px;"></div>
+                <div class="sweat-drop" id="sweat2" style="right: 60px; top: 40px;"></div>
+                <!-- Dedo digitando -->
+                <div class="typing-finger" id="typing-finger" style="right: 40px; bottom: 60px;"></div>
+                <!-- Notificação -->
+                <div class="notification" id="notification" style="right: 30px; top: 30px;"></div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Tempo de tela</span>
+                    <span id="time-display-2">2 horas</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-2"></div>
+                </div>
+            </div>
+            
+            <button id="add-time-2" class="btn">+ 30 minutos</button>
+            
+            <div class="message-box" id="message-2">
+                <p>Vamos ver como o tempo de tela afeta a saúde mental.</p>
+            </div>
+        </div>
+
+        <!-- Fase 3: Isolamento -->
+        <div id="screen-3" class="screen">
+            <h2 class="screen-title">Isolamento Social</h2>
+            <p class="screen-subtitle">O que acontece quando o uso do celular é excessivo?</p>
+            
+            <div class="character-container">
+                <div class="character" id="character-3"></div>
+                <div class="friend" id="friend1" style="left: 50px; top: 50px;"></div>
+                <div class="friend" id="friend2" style="right: 50px; top: 50px;"></div>
+                <!-- Nuvem de solidão -->
+                <div class="aura" id="loneliness" style="background: radial-gradient(circle, rgba(150,150,150,0.2) 0%, rgba(150,150,150,0) 70%);"></div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Tempo de tela</span>
+                    <span id="time-display-3">4 horas</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-3"></div>
+                </div>
+            </div>
+            
+            <button id="add-time-3" class="btn">+ 30 minutos</button>
+            
+            <div class="message-box" id="message-3">
+                <p>Observe como as relações sociais são afetadas.</p>
+            </div>
+        </div>
+
+        <!-- Fase 4: Miopia e Sono -->
+        <div id="screen-4" class="screen">
+            <h2 class="screen-title">Saúde Física</h2>
+            <p class="screen-subtitle">Cada hora de tela aumenta o risco de problemas visuais e de sono:</p>
+            
+            <div class="character-container">
+                <div class="character" id="character-4"></div>
+                <div class="glasses" id="glasses"></div>
+                <div class="sleep-effect" id="sleep-effect"></div>
+                <!-- Efeito zzz -->
+                <div class="zzz" id="zzz1" style="left: 70px; top: 130px;">z</div>
+                <div class="zzz" id="zzz2" style="left: 85px; top: 125px;">z</div>
+                <div class="zzz" id="zzz3" style="left: 100px; top: 130px;">z</div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Tempo de tela</span>
+                    <span id="time-display-4">6 horas</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-4"></div>
+                </div>
+            </div>
+            
+            <button id="add-time-4" class="btn">+ 30 minutos</button>
+            
+            <div class="message-box" id="message-4">
+                <p>Seus olhos e seu sono estão em risco.</p>
+            </div>
+        </div>
+
+        <!-- Fase Final: Desconexão -->
+        <div id="screen-final" class="screen">
+            <h2 class="screen-title">Você consegue se desconectar?</h2>
+            <p class="screen-subtitle">Clique para ver os benefícios de reduzir o tempo de tela:</p>
+            
+            <div class="character-container">
+                <div class="aura" id="positive-aura"></div>
+                <div class="character" id="character-final"></div>
+                <!-- Pássaros -->
+                <div class="bird" id="bird1" style="left: 20px; top: 20px;"></div>
+                <div class="bird" id="bird2" style="right: 20px; top: 30px;"></div>
+            </div>
+            
+            <button id="disconnect-btn" class="btn btn-secondary">Desconectar por 3 dias</button>
+            
+            <div class="message-box" id="message-final">
+                <p>Experimente ficar sem celular e observe as mudanças.</p>
+            </div>
+        </div>
+
+        <!-- Tela Final -->
+        <div id="screen-end" class="screen">
+            <h2 class="screen-title">E aí, seu uso do celular é saudável?</h2>
+            
+            <div class="character-container">
+                <div class="character" id="character-end"></div>
+            </div>
+            
+            <div class="message-box">
+                <p><strong>Resultados baseados em pesquisas científicas:</strong></p>
+                <ul>
+                    <li><strong>Obesidade:</strong> Jovens com +2h/dia de tela têm o dobro de risco de obesidade. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank">(Estudo canadense)</a></li>
+                    <li><strong>Saúde mental:</strong> +4h/dia aumenta estresse e ideação suicida. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank">(Pesquisa coreana)</a></li>
+                    <li><strong>Saúde física e mental:</strong> Uso excessivo prejudica múltiplos aspectos da saúde. <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank">(Estudo Diário do Povo)</a></li>
+                    <li><strong>Visão:</strong> Cada hora extra de tela aumenta em 21% o risco de miopia. <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank">(Estudo Health.com)</a></li>
+                    <li><strong>Sono:</strong> Telas antes de dormir prejudicam a qualidade do sono. <a href="https://pt.wikipedia.org/wiki/Tempo_de_tela" target="_blank">(Wikipedia)</a></li>
+                    <li><strong>Desconexão:</strong> 2 semanas sem internet móvel melhoram saúde mental. <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank">(NY Post)</a></li>
+                </ul>
+            </div>
+            
+            <div class="social-links">
+                <p>Gostou do teste? Me conte sua experiência ou sugestões!</p>
+                <a href="https://instagram.com/bielcrod" target="_blank" aria-label="Instagram">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="white"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <button id="restart-btn" class="btn">Refazer Teste</button>
+        </div>
+
+        <!-- Indicador de Som -->
+        <div class="sound-indicator" id="sound-toggle" title="Alternar som">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Efeitos Sonoros (Base64 encoded para evitar requests externos) -->
+    <audio id="click-sound" preload="auto">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+    <audio id="notification-sound" preload="auto">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+    <audio id="positive-sound" preload="auto">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Configurações Globais
+        const config = {
+            soundEnabled: true,
+            animationSpeed: 0.5,
+            debugMode: false
+        };
+
+        // Estado do Jogo
+        const gameState = {
+            currentScreen: 0,
+            time: 0,
+            maxTime: 8, // 8 horas = 16 cliques de 30min
+            screens: [
+                "screen-start",
+                "screen-1",
+                "screen-2",
+                "screen-3",
+                "screen-4",
+                "screen-final",
+                "screen-end"
+            ]
+        };
+
+        // Elementos DOM
+        const dom = {
+            startBtn: document.getElementById("start-btn"),
+            restartBtn: document.getElementById("restart-btn"),
+            addTimeBtns: [
+                document.getElementById("add-time-1"),
+                document.getElementById("add-time-2"),
+                document.getElementById("add-time-3"),
+                document.getElementById("add-time-4")
+            ],
+            disconnectBtn: document.getElementById("disconnect-btn"),
+            messageBoxes: [
+                document.getElementById("message-1"),
+                document.getElementById("message-2"),
+                document.getElementById("message-3"),
+                document.getElementById("message-4"),
+                document.getElementById("message-final")
+            ],
+            progressBars: [
+                document.getElementById("progress-1"),
+                document.getElementById("progress-2"),
+                document.getElementById("progress-3"),
+                document.getElementById("progress-4")
+            ],
+            timeDisplays: [
+                document.getElementById("time-display-1"),
+                document.getElementById("time-display-2"),
+                document.getElementById("time-display-3"),
+                document.getElementById("time-display-4")
+            ],
+            characters: [
+                document.getElementById("character-1"),
+                document.getElementById("character-2"),
+                document.getElementById("character-3"),
+                document.getElementById("character-4"),
+                document.getElementById("character-final"),
+                document.getElementById("character-end")
+            ],
+            stressEffect: document.getElementById("stress-effect"),
+            friend1: document.getElementById("friend1"),
+            friend2: document.getElementById("friend2"),
+            glasses: document.getElementById("glasses"),
+            sleepEffect: document.getElementById("sleep-effect"),
+            soundToggle: document.getElementById("sound-toggle"),
+            clickSound: document.getElementById("click-sound"),
+            notificationSound: document.getElementById("notification-sound"),
+            positiveSound: document.getElementById("positive-sound"),
+            food1: document.getElementById("food1"),
+            food2: document.getElementById("food2"),
+            sweat1: document.getElementById("sweat1"),
+            sweat2: document.getElementById("sweat2"),
+            typingFinger: document.getElementById("typing-finger"),
+            notification: document.getElementById("notification"),
+            loneliness: document.getElementById("loneliness"),
+            zzz1: document.getElementById("zzz1"),
+            zzz2: document.getElementById("zzz2"),
+            zzz3: document.getElementById("zzz3"),
+            positiveAura: document.getElementById("positive-aura"),
+            bird1: document.getElementById("bird1"),
+            bird2: document.getElementById("bird2")
+        };
+
+        // SVG Strings para cada personagem
+        const characterSVGs = {
+            // Fase 1 - Criança (3 estados)
+            child_normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" fill="#FFD700"/>
+                <!-- Rosto -->
+                <circle cx="70" cy="80" r="10" fill="#333"/>
+                <circle cx="130" cy="80" r="10" fill="#333"/>
+                <path d="M80,120 Q100,140 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <!-- Detalhes -->
+                <circle cx="100" cy="110" r="5" fill="#FF8A65"/>
+                <path d="M95,95 L105,95" stroke="#333" stroke-width="2"/>
+                <!-- Corpo -->
+                <path d="M100,120 L100,160" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L120,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,160 L80,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,160 L120,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+            </svg>`,
+            
+            child_happy: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" fill="#FFD700"/>
+                <!-- Rosto feliz -->
+                <circle cx="70" cy="80" r="8" fill="#333"/>
+                <circle cx="130" cy="80" r="8" fill="#333"/>
+                <path d="M80,120 Q100,150 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <!-- Bochechas -->
+                <circle cx="85" cy="100" r="10" fill="#FF8A65"/>
+                <circle cx="115" cy="100" r="10" fill="#FF8A65"/>
+                <!-- Corpo -->
+                <path d="M100,120 L100,160" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L120,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,160 L80,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,160 L120,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <!-- Comida na mão -->
+                <circle cx="75" cy="150" r="15" fill="#FF5252"/>
+            </svg>`,
+            
+            child_overweight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <!-- Corpo maior -->
+                <circle cx="100" cy="110" r="90" fill="#FFD700"/>
+                <!-- Rosto preocupado -->
+                <circle cx="70" cy="80" r="8" fill="#333"/>
+                <circle cx="130" cy="80" r="8" fill="#333"/>
+                <path d="M80,110 Q100,120 120,110" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <!-- Mãos segurando comida -->
+                <path d="M50,130 L70,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M150,130 L130,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <!-- Pernas mais grossas -->
+                <path d="M100,160 L80,190" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+                <path d="M100,160 L120,190" stroke="#333" stroke-width="6" stroke-linecap="round"/>
+                <!-- Comida -->
+                <circle cx="65" cy="150" r="15" fill="#FF5252"/>
+                <circle cx="135" cy="150" r="12" fill="#FFD180"/>
+            </svg>`,
+
+            // Fase 2 - Adolescente estressado
+            teen_stressed: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" fill="#FFA07A"/>
+                <!-- Olheiras -->
+                <ellipse cx="70" cy="80" rx="10" ry="8" fill="#555"/>
+                <ellipse cx="130" cy="80" rx="10" ry="8" fill="#555"/>
+                <circle cx="70" cy="80" r="5" fill="#333"/>
+                <circle cx="130" cy="80" r="5" fill="#333"/>
+                <!-- Boca tensa -->
+                <path d="M80,120 L120,120" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <!-- Celular na mão -->
+                <rect x="130" y="130" width="30" height="50" rx="3" fill="#333"/>
+                <rect x="135" y="135" width="20" height="40" fill="#2196F3"/>
+                <!-- Corpo -->
+                <path d="M100,120 L100,170" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,170 L80,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,170 L120,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+            </svg>`,
+
+            // Fase 3 - Isolamento
+            teen_isolated: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" fill="#ADD8E6"/>
+                <!-- Olhos cansados -->
+                <path d="M65,80 Q70,85 75,80" fill="none" stroke="#333" stroke-width="2"/>
+                <path d="M125,80 Q130,85 135,80" fill="none" stroke="#333" stroke-width="2"/>
+                <!-- Boca triste -->
+                <path d="M80,120 Q100,110 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <!-- Celular -->
+                <rect x="110" y="120" width="35" height="60" rx="3" fill="#333"/>
+                <rect x="115" y="125" width="25" height="50" fill="#2196F3"/>
+                <!-- Corpo curvado -->
+                <path d="M100,120 Q110,150 100,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,150 L80,160" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,180 L80,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,180 L120,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+            </svg>`,
+
+            // Fase 4 - Miopia e cansaço
+            teen_tired: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" fill="#E6E6FA"/>
+                <!-- Olhos vermelhos -->
+                <circle cx="70" cy="80" r="10" fill="#FF5252"/>
+                <circle cx="130" cy="80" r="10" fill="#FF5252"/>
+                <circle cx="70" cy="80" r="5" fill="#333"/>
+                <circle cx="130" cy="80" r="5" fill="#333"/>
+                <!-- Boca aberta (bocejo) -->
+                <ellipse cx="100" cy="120" rx="15" ry="10" fill="#333"/>
+                <!-- Corpo -->
+                <path d="M100,120 L100,170" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,170 L80,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,170 L120,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <!-- Celular na cama -->
+                <rect x="120" y="150" width="30" height="50" rx="3" fill="#333"/>
+            </svg>`,
+
+            // Fase Final - Feliz
+            teen_happy: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="80" fill="#98FB98"/>
+                <!-- Olhos abertos -->
+                <circle cx="70" cy="80" r="10" fill="white" stroke="#333" stroke-width="2"/>
+                <circle cx="130" cy="80" r="10" fill="white" stroke="#333" stroke-width="2"/>
+                <circle cx="70" cy="80" r="5" fill="#333"/>
+                <circle cx="130" cy="80" r="5" fill="#333"/>
+                <!-- Sorriso -->
+                <path d="M80,120 Q100,150 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+                <!-- Corpo ativo -->
+                <path d="M100,120 L100,170" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L70,130" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,140 L130,130" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,170 L80,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <path d="M100,170 L120,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                <!-- Livro na mão -->
+                <rect x="65" y="125" width="20" height="25" fill="#795548" rx="2"/>
+                <line x1="65" y1="135" x2="85" y2="135" stroke="white" stroke-width="1"/>
+            </svg>`,
+
+            // Amigos
+            friend1: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="20" fill="#FFB6C1"/>
+                <!-- Rosto -->
+                <circle cx="18" cy="20" r="3" fill="#333"/>
+                <circle cx="32" cy="20" r="3" fill="#333"/>
+                <path d="M18,30 Q25,35 32,30" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <!-- Corpo -->
+                <path d="M25,35 L25,45" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+            </svg>`,
+
+            friend2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="20" fill="#98FB98"/>
+                <!-- Rosto -->
+                <circle cx="18" cy="20" r="3" fill="#333"/>
+                <circle cx="32" cy="20" r="3" fill="#333"/>
+                <path d="M18,30 Q25,35 32,30" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <!-- Corpo -->
+                <path d="M25,35 L25,45" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <path d="M25,40 L15,35" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+            </svg>`
+        };
+
+        // Mensagens do Jogo (com links atualizados)
+        const messages = {
+            start: [
+                "Clique no botão para começar a simulação.",
+                "1 hora: Cuidado! O tempo está aumentando...",
+                `2 horas: <strong>No Canadá, jovens com +2h/dia de tela têm o DOBRO de risco de obesidade!</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank">(Estudo canadense)</a>`
+            ],
+            stress: [
+                "Vamos ver como o tempo de tela afeta a saúde mental.",
+                "3 horas: Seu nível de estresse está subindo...",
+                `4 horas: <strong>Na Coreia do Sul, +4h/dia aumenta ideação suicida e uso de drogas!</strong> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank">(Pesquisa coreana)</a>`
+            ],
+            isolation: [
+                "Observe como as relações sociais são afetadas.",
+                "5 horas: Seus amigos estão se afastando...",
+                `6 horas: <strong>Uso excessivo reduz qualidade de vida física e social!</strong> <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank">(Estudo Diário do Povo)</a>`
+            ],
+            health: [
+                "Seus olhos e seu sono estão em risco.",
+                "7 horas: Seus olhos estão ficando cansados...",
+                `8 horas: <strong>Cada hora de tela/dia aumenta em 21% o risco de miopia em crianças!</strong> <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank">(Estudo Health.com)</a>`
+            ],
+            disconnect: [
+                "Experimente ficar sem celular e observe as mudanças.",
+                `3 dias sem celular podem <strong>reorganizar seu cérebro</strong> (sistema de dopamina e serotonina)! <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank">(NY Post)</a>`
+            ]
+        };
+
+        // Inicialização do Jogo
+        function initGame() {
+            // Event Listeners
+            dom.startBtn.addEventListener("click", startGame);
+            dom.restartBtn.addEventListener("click", resetGame);
+            dom.disconnectBtn.addEventListener("click", showFinalResults);
+            dom.soundToggle.addEventListener("click", toggleSound);
+
+            // Botões de adicionar tempo
+            dom.addTimeBtns.forEach((btn, index) => {
+                btn.addEventListener("click", () => addTime(index));
+            });
+
+            // Inicializar personagens e elementos
+            initCharacters();
+            initFoodBubbles();
+            initFriends();
+
+            // Verificar suporte a áudio
+            checkAudioSupport();
+        }
+
+        // Inicializar personagens
+        function initCharacters() {
+            dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_normal)}")`;
+            dom.characters[1].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.teen_stressed)}")`;
+            dom.characters[2].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.teen_isolated)}")`;
+            dom.characters[3].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.teen_tired)}")`;
+            dom.characters[4].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.teen_happy)}")`;
+            dom.characters[5].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.teen_happy)}")`;
+        }
+
+        // Inicializar bolhas de comida
+        function initFoodBubbles() {
+            dom.food1.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#FF5252"/><path d="M12,15 Q20,5 28,15 Q25,25 20,30 Q15,25 12,15" fill="#FF8A80"/></svg>')}")`;
+            dom.food2.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="M20,5 Q30,15 20,25 Q10,15 20,5" fill="#FFD180"/><circle cx="15" cy="15" r="3" fill="#795548"/><circle cx="25" cy="15" r="3" fill="#795548"/></svg>')}")`;
+        }
+
+        // Inicializar amigos
+        function initFriends() {
+            dom.friend1.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.friend1)}")`;
+            dom.friend2.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.friend2)}")`;
+        }
+
+        // Funções do Jogo
+        function startGame() {
+            playSound('click');
+            showScreen(1);
+            updateGameState();
+        }
+
+        function resetGame() {
+            playSound('click');
+            gameState.time = 0;
+            gameState.currentScreen = 0;
+            resetAnimations();
+            updateGameState();
+            showScreen(0);
+        }
+
+        function addTime(phaseIndex) {
+            playSound('click');
+            gameState.time += 0.5; // +30min
+            
+            // Atualizar interface
+            updateProgress();
+            updateTimeDisplay();
+            updateAnimations(phaseIndex);
+            updateMessages(phaseIndex);
+            
+            // Verificar se deve avançar para próxima fase
+            checkPhaseTransition(phaseIndex);
+        }
+
+        function showScreen(screenIndex) {
+            // Esconder todas as telas
+            gameState.screens.forEach(screen => {
+                document.getElementById(screen).classList.remove('active');
+            });
+            
+            // Mostrar tela atual
+            document.getElementById(gameState.screens[screenIndex]).classList.add('active');
+            gameState.currentScreen = screenIndex;
+            
+            // Efeito visual ao mudar de tela
+            if (screenIndex > 0) {
+                playSound('notification');
+            }
+        }
+
+        function updateProgress() {
+            const progressPercentage = (gameState.time / gameState.maxTime) * 100;
+            
+            // Atualizar todas as barras de progresso visíveis
+            dom.progressBars.forEach(bar => {
+                if (bar.parentElement.parentElement.parentElement.classList.contains('active')) {
+                    bar.style.width = `${progressPercentage}%`;
+                }
+            });
+        }
+
+        function updateTimeDisplay() {
+            const timeText = `${gameState.time} hora${gameState.time !== 1 ? 's' : ''}`;
+            
+            // Atualizar todos os displays de tempo visíveis
+            dom.timeDisplays.forEach(display => {
+                if (display.parentElement.parentElement.parentElement.classList.contains('active')) {
+                    display.textContent = timeText;
+                }
+            });
+        }
+
+        function updateAnimations(phaseIndex) {
+            switch(phaseIndex) {
+                case 0: // Fase 1 - Obesidade
+                    if (gameState.time >= 1) {
+                        // Transição para feliz ao comer
+                        dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_happy)}")`;
+                        // Ativar bolhas de comida
+                        dom.food1.style.animation = "float 3s infinite, fadeIn 1s forwards";
+                        dom.food2.style.animation = "float 3s infinite 0.5s, fadeIn 1s forwards";
+                    }
+                    if (gameState.time >= 2) {
+                        // Transição para acima do peso
+                        dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_overweight)}")`;
+                        dom.characters[0].classList.add('pulse');
+                    }
+                    break;
+                    
+                case 1: // Fase 2 - Estresse
+                    if (gameState.time >= 3) {
+                        // Ativar gotas de suor
+                        dom.sweat1.style.animation = "fadeIn 1s forwards";
+                        dom.sweat2.style.animation = "fadeIn 1s 0.3s forwards";
+                        dom.stressEffect.style.background = "rgba(255,0,0,0.1)";
+                        // Ativar dedo digitando
+                        dom.typingFinger.style.animation = "typing 0.5s infinite, fadeIn 1s forwards";
+                        // Notificação
+                        dom.notification.style.animation = "bounce 1s infinite, fadeIn 1s forwards";
+                    }
+                    if (gameState.time >= 4) {
+                        // Aumentar efeito de estresse
+                        dom.stressEffect.style.background = "rgba(255,0,0,0.3)";
+                        dom.characters[1].classList.add('shake');
+                        setTimeout(() => {
+                            dom.characters[1].classList.remove('shake');
+                        }, 500);
+                    }
+                    break;
+                    
+                case 2: // Fase 3 - Isolamento
+                    if (gameState.time >= 5) {
+                        // Amigos começam a se afastar
+                        dom.friend1.style.left = "10px";
+                        dom.friend1.style.opacity = "0.5";
+                        dom.friend2.style.right = "10px";
+                        dom.friend2.style.opacity = "0.5";
+                        // Nuvem de solidão
+                        dom.loneliness.style.animation = "fadeIn 1s forwards";
+                    }
+                    if (gameState.time >= 6) {
+                        // Amigos saem de cena
+                        dom.friend1.style.left = "-50px";
+                        dom.friend1.style.opacity = "0";
+                        dom.friend2.style.right = "-50px";
+                        dom.friend2.style.opacity = "0";
+                        // Nuvem de solidão mais densa
+                        dom.loneliness.style.opacity = "0.3";
+                    }
+                    break;
+                    
+                case 3: // Fase 4 - Miopia e Sono
+                    if (gameState.time >= 7) {
+                        // Óculos aparecem
+                        dom.glasses.style.opacity = "0.7";
+                        // Efeito de sono
+                        dom.sleepEffect.style.opacity = "1";
+                        dom.sleepEffect.style.top = "40px";
+                        dom.sleepEffect.style.left = "85px";
+                        // Efeito zzz
+                        dom.zzz1.style.animation = "fadeIn 1s forwards, float 2s infinite";
+                        dom.zzz2.style.animation = "fadeIn 1s 0.3s forwards, float 2s infinite 0.3s";
+                        dom.zzz3.style.animation = "fadeIn 1s 0.6s forwards, float 2s infinite 0.6s";
+                    }
+                    if (gameState.time >= 8) {
+                        // Óculos mais visíveis
+                        dom.glasses.style.opacity = "1";
+                        // Ajustar posição do efeito de sono
+                        dom.sleepEffect.style.top = "30px";
+                        dom.sleepEffect.style.left = "75px";
+                        dom.sleepEffect.classList.add('blink');
+                    }
+                    break;
+            }
+        }
+
+        function updateMessages(phaseIndex) {
+            let messageIndex;
+            
+            if (phaseIndex === 0) {
+                // Fase 1: Obesidade
+                messageIndex = gameState.time >= 2 ? 2 : gameState.time >= 1 ? 1 : 0;
+                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.start[messageIndex]}</p>`;
+            } else if (phaseIndex === 1) {
+                // Fase 2: Estresse
+                messageIndex = gameState.time >= 4 ? 2 : gameState.time >= 3 ? 1 : 0;
+                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.stress[messageIndex]}</p>`;
+            } else if (phaseIndex === 2) {
+                // Fase 3: Isolamento
+                messageIndex = gameState.time >= 6 ? 2 : gameState.time >= 5 ? 1 : 0;
+                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.isolation[messageIndex]}</p>`;
+            } else if (phaseIndex === 3) {
+                // Fase 4: Saúde Física
+                messageIndex = gameState.time >= 8 ? 2 : gameState.time >= 7 ? 1 : 0;
+                dom.messageBoxes[phaseIndex].innerHTML = `<p>${messages.health[messageIndex]}</p>`;
+            }
+        }
+
+        function checkPhaseTransition(phaseIndex) {
+            if (phaseIndex === 0 && gameState.time >= 2) {
+                setTimeout(() => showScreen(2), 1500);
+            } else if (phaseIndex === 1 && gameState.time >= 4) {
+                setTimeout(() => showScreen(3), 1500);
+            } else if (phaseIndex === 2 && gameState.time >= 6) {
+                setTimeout(() => showScreen(4), 1500);
+            } else if (phaseIndex === 3 && gameState.time >= 8) {
+                setTimeout(() => showScreen(5), 1500);
+            }
+        }
+
+        function showFinalResults() {
+            playSound('positive');
+            dom.messageBoxes[4].innerHTML = `<p>${messages.disconnect[1]}</p>`;
+            
+            // Ativar efeitos positivos
+            dom.positiveAura.style.animation = "fadeIn 1s forwards, pulse 2s infinite";
+            dom.bird1.style.animation = "fadeIn 1s forwards, float 3s infinite";
+            dom.bird2.style.animation = "fadeIn 1s 0.5s forwards, float 3s infinite 0.5s";
+            
+            setTimeout(() => {
+                showScreen(6);
+            }, 2500);
+        }
+
+        function resetAnimations() {
+            // Resetar personagens
+            dom.characters.forEach(char => {
+                char.style.transform = "scale(1)";
+                char.classList.remove('shake', 'pulse');
+            });
+            dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_normal)}")`;
+            
+            // Resetar efeitos
+            dom.stressEffect.style.background = "rgba(255,0,0,0)";
+            dom.friend1.style.left = "50px";
+            dom.friend1.style.opacity = "1";
+            dom.friend2.style.right = "50px";
+            dom.friend2.style.opacity = "1";
+            dom.glasses.style.opacity = "0";
+            dom.sleepEffect.style.opacity = "0";
+            dom.sleepEffect.classList.remove('blink');
+            dom.loneliness.style.opacity = "0";
+            dom.positiveAura.style.opacity = "0";
+            
+            // Resetar elementos animados
+            [dom.food1, dom.food2, dom.sweat1, dom.sweat2, dom.typingFinger, 
+             dom.notification, dom.zzz1, dom.zzz2, dom.zzz3, dom.bird1, dom.bird2].forEach(el => {
+                el.style.animation = "none";
+                el.style.opacity = "0";
+            });
+            
+            // Resetar barras de progresso
+            dom.progressBars.forEach(bar => {
+                bar.style.width = "0%";
+            });
+        }
+
+        function updateGameState() {
+            updateProgress();
+            updateTimeDisplay();
+        }
+
+        // Funções de Áudio
+        function playSound(type) {
+            if (!config.soundEnabled) return;
+            
+            try {
+                switch(type) {
+                    case 'click':
+                        dom.clickSound.currentTime = 0;
+                        dom.clickSound.play();
+                        break;
+                    case 'notification':
+                        dom.notificationSound.currentTime = 0;
+                        dom.notificationSound.play();
+                        break;
+                    case 'positive':
+                        dom.positiveSound.currentTime = 0;
+                        dom.positiveSound.play();
+                        break;
+                }
+            } catch (e) {
+                if (config.debugMode) console.error("Erro ao reproduzir som:", e);
+            }
+        }
+
+        function toggleSound() {
+            config.soundEnabled = !config.soundEnabled;
+            dom.soundToggle.innerHTML = config.soundEnabled ? 
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>' :
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>';
+            
+            // Feedback visual
+            dom.soundToggle.style.backgroundColor = config.soundEnabled ? "rgba(0, 0, 0, 0.7)" : "rgba(255, 0, 0, 0.7)";
+        }
+
+        function checkAudioSupport() {
+            try {
+                const canPlay = dom.clickSound.canPlayType('audio/mpeg');
+                if (canPlay === 'probably' || canPlay === 'maybe') {
+                    config.soundEnabled = true;
+                } else {
+                    config.soundEnabled = false;
+                    dom.soundToggle.style.display = 'none';
+                }
+            } catch (e) {
+                config.soundEnabled = false;
+                dom.soundToggle.style.display = 'none';
+                if (config.debugMode) console.error("Navegador não suporta áudio:", e);
+            }
+        }
+
+        // Iniciar o jogo quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
