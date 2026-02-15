@@ -4,30 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Teste interativo que mostra os efeitos do uso excessivo de smartphones na saúde">
+    <meta name="theme-color" content="#4CAF50">
     <title>Teste: Seu Uso do Celular é Saudável?</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Reset e Estilos Base */
+        /* ================================
+           VARIÁVEIS CSS APRIMORADAS
+           ================================ */
         :root {
             --primary: #4CAF50;
             --primary-dark: #388E3C;
+            --primary-light: #81C784;
             --secondary: #2196F3;
+            --secondary-dark: #1976D2;
             --danger: #F44336;
+            --danger-dark: #D32F2F;
             --warning: #FFC107;
+            --warning-dark: #FFB300;
+            --success: #4CAF50;
             --text: #333333;
             --text-light: #757575;
+            --text-lighter: #9E9E9E;
             --text-contrast: #FFFFFF;
             --bg: #f5f5f5;
+            --bg-secondary: #FAFAFA;
             --card-bg: #FFFFFF;
             --progress-bg: #E0E0E0;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
             --radius: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 16px;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-fast: all 0.15s ease;
             --focus-outline: 2px solid var(--secondary);
+            --max-width: 800px;
         }
 
+        /* ================================
+           RESET E ESTILOS BASE
+           ================================ */
         * {
             margin: 0;
             padding: 0;
@@ -38,55 +57,69 @@
         :focus-visible {
             outline: var(--focus-outline);
             outline-offset: 2px;
+            border-radius: 4px;
         }
 
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--bg);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
             touch-action: manipulation;
+            min-height: 100vh;
         }
 
+        /* ================================
+           CONTAINER PRINCIPAL
+           ================================ */
         #app {
-            max-width: 100%;
+            max-width: var(--max-width);
             min-height: 100vh;
             padding: 20px;
             margin: 0 auto;
             position: relative;
-            overflow: hidden;
         }
 
-        /* Componentes Reutilizáveis */
+        /* ================================
+           SISTEMA DE TELAS MELHORADO
+           ================================ */
         .screen {
-            background-color: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 32px 24px;
             margin-bottom: 20px;
             transition: var(--transition);
             position: absolute;
             width: calc(100% - 40px);
+            max-width: calc(var(--max-width) - 40px);
             top: 20px;
-            left: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
             opacity: 0;
             pointer-events: none;
-            transform: translateY(20px);
             z-index: 1;
+            backdrop-filter: blur(10px);
         }
 
         .screen.active {
             opacity: 1;
             pointer-events: all;
-            transform: translateY(0);
+            transform: translateX(-50%) translateY(0);
             z-index: 2;
         }
 
+        /* ================================
+           BOTÕES APRIMORADOS
+           ================================ */
         .btn {
-            display: inline-block;
-            padding: 14px 28px;
-            background-color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             border-radius: 50px;
@@ -96,55 +129,80 @@
             text-decoration: none;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
             margin: 12px 0;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
             position: relative;
             overflow: hidden;
+            user-select: none;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover, .btn:focus {
-            background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
         }
 
         .btn:active {
             transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         .btn-secondary {
-            background-color: var(--secondary);
-            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
         }
 
         .btn-secondary:hover, .btn-secondary:focus {
-            background-color: #1976D2;
-            box-shadow: 0 6px 12px rgba(33, 150, 243, 0.4);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
         }
 
         .btn-warning {
-            background-color: var(--warning);
-            color: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+            background: linear-gradient(135deg, var(--warning) 0%, var(--warning-dark) 100%);
+            color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
         }
 
         .btn-warning:hover, .btn-warning:focus {
-            background-color: #FFB300;
-            box-shadow: 0 6px 12px rgba(255, 193, 7, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
         }
 
         .btn-danger {
-            background-color: var(--danger);
-            box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-dark) 100%);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
         }
 
         .btn-danger:hover, .btn-danger:focus {
-            background-color: #D32F2F;
-            box-shadow: 0 6px 12px rgba(244, 67, 54, 0.4);
+            box-shadow: 0 8px 20px rgba(244, 67, 54, 0.4);
         }
 
+        /* ================================
+           BARRA DE PROGRESSO APRIMORADA
+           ================================ */
         .progress-container {
             width: 100%;
             margin: 24px 0;
@@ -153,31 +211,68 @@
         .progress-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            align-items: center;
+            margin-bottom: 12px;
             font-size: 14px;
             color: var(--text-light);
+            font-weight: 500;
         }
 
         .progress-bar {
-            height: 12px;
+            height: 14px;
             background-color: var(--progress-bg);
-            border-radius: 6px;
+            border-radius: 7px;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            animation: shimmer 2s infinite;
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--primary), #8BC34A);
-            border-radius: 6px;
-            transition: width 0.5s ease-out;
+            background: linear-gradient(90deg, var(--primary) 0%, #81C784 50%, #4CAF50 100%);
+            border-radius: 7px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
         }
 
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4));
+            border-radius: 0 7px 7px 0;
+        }
+
+        /* ================================
+           PERSONAGEM E CONTAINER
+           ================================ */
         .character-container {
             position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 24px;
+            width: 220px;
+            height: 220px;
+            margin: 24px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .character {
@@ -189,61 +284,94 @@
             transition: var(--transition);
             position: relative;
             z-index: 1;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
         }
 
+        /* ================================
+           CAIXA DE MENSAGENS APRIMORADA
+           ================================ */
         .message-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid var(--primary);
-            padding: 16px;
-            border-radius: 0 var(--radius) var(--radius) 0;
-            margin: 20px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin: 24px 0;
             text-align: left;
-            line-height: 1.6;
+            line-height: 1.7;
             min-height: 120px;
             display: flex;
             align-items: center;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
 
         .message-box p {
             margin-bottom: 0;
             width: 100%;
+            position: relative;
+            z-index: 1;
+            font-size: 15px;
         }
 
         .message-box ul {
-            margin-top: 12px;
-            padding-left: 20px;
+            margin-top: 16px;
+            padding-left: 24px;
         }
 
         .message-box li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         .message-box a {
             color: var(--primary);
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition-fast);
         }
 
         .message-box a:hover {
-            text-decoration: underline;
+            border-bottom-color: var(--primary);
         }
 
+        .message-box strong {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        /* ================================
+           ELEMENTOS ANIMADOS
+           ================================ */
         .friend {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 2;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         .glasses {
             position: absolute;
-            width: 120px;
-            height: 50px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50"><path d="M20,25 Q50,5 80,25" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="25" r="18" fill="none" stroke="%23333" stroke-width="2"/><circle cx="90" cy="25" r="18" fill="none" stroke="%23333" stroke-width="2"/></svg>');
+            width: 130px;
+            height: 55px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50"><path d="M20,25 Q50,5 80,25" fill="none" stroke="%23333" stroke-width="3" stroke-linecap="round"/><circle cx="30" cy="25" r="18" fill="none" stroke="%23333" stroke-width="3"/><circle cx="90" cy="25" r="18" fill="none" stroke="%23333" stroke-width="3"/></svg>');
             background-repeat: no-repeat;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -253,14 +381,76 @@
             z-index: 3;
         }
 
-        .sleep-effect {
+        .food-bubble {
             position: absolute;
-            width: 30px;
-            height: 30px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M5,15 Q15,5 25,15" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round"/><path d="M5,20 Q15,10 25,20" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round"/></svg>');
-            background-repeat: no-repeat;
+            width: 45px;
+            height: 45px;
+            background-size: contain;
             opacity: 0;
-            z-index: 3;
+            animation: float 3s infinite;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+        
+        .sweat-drop {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 15"><path d="M5 0 Q7 5 5 10 Q3 5 5 0" fill="%2366B3FF"/></svg>');
+            opacity: 0;
+            animation: drip 1.5s infinite;
+        }
+        
+        .zzz {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #999;
+            opacity: 0;
+            animation: float 2s infinite;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .aura {
+            position: absolute;
+            width: 130%;
+            height: 130%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(100,255,100,0.3) 0%, rgba(100,255,100,0) 70%);
+            opacity: 0;
+            animation: pulse 3s infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .typing-finger {
+            position: absolute;
+            width: 12px;
+            height: 22px;
+            background-color: #FFD700;
+            border-radius: 6px;
+            opacity: 0;
+            animation: typing 0.5s infinite, fadeIn 1s forwards;
+        }
+        
+        .notification {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #F44336;
+            border-radius: 50%;
+            opacity: 0;
+            animation: bounce 1s infinite, fadeIn 1s forwards;
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.6);
+        }
+        
+        .bird {
+            position: absolute;
+            width: 32px;
+            height: 22px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20"><path d="M0,10 Q15,-10 30,10 Q15,30 0,10" fill="%23333"/></svg>');
+            opacity: 0;
+            animation: fly 3s infinite;
         }
 
         .stress-effect {
@@ -271,156 +461,102 @@
             background: rgba(255, 0, 0, 0);
             transition: background 0.5s ease;
             z-index: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        .pulse {
-            animation: pulse 1.5s infinite;
-        }
-
-        .sr-only {
+        .sleep-effect {
             position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
+            width: 32px;
+            height: 32px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><path d="M5,15 Q15,5 25,15" fill="none" stroke="%23333" stroke-width="3" stroke-linecap="round"/><path d="M5,20 Q15,10 25,20" fill="none" stroke="%23333" stroke-width="3" stroke-linecap="round"/></svg>');
+            background-repeat: no-repeat;
+            opacity: 0;
+            z-index: 3;
         }
 
-        /* Animações Aprimoradas */
+        /* ================================
+           ANIMAÇÕES APRIMORADAS
+           ================================ */
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(-2deg); }
-            25% { transform: translateY(-10px) rotate(2deg); }
-            50% { transform: translateY(-15px) rotate(-2deg); }
-            75% { transform: translateY(-10px) rotate(2deg); }
+            25% { transform: translateY(-12px) rotate(2deg); }
+            50% { transform: translateY(-18px) rotate(-2deg); }
+            75% { transform: translateY(-12px) rotate(2deg); }
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
         }
         
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+            20%, 40%, 60%, 80% { transform: translateX(6px); }
         }
         
         @keyframes blink {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            50% { opacity: 0.4; }
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-12px); }
         }
         
         @keyframes typing {
-            0% { transform: scaleY(1); }
+            0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(0.6); }
-            100% { transform: scaleY(1); }
         }
         
         @keyframes wobble {
             0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            75% { transform: rotate(-5deg); }
+            25% { transform: rotate(6deg); }
+            75% { transform: rotate(-6deg); }
         }
         
         @keyframes drip {
             0% { transform: translateY(0) scaleY(0.8); opacity: 0; }
             20% { opacity: 1; }
-            100% { transform: translateY(30px) scaleY(1); opacity: 0; }
+            100% { transform: translateY(35px) scaleY(1); opacity: 0; }
         }
         
         @keyframes fly {
             0% { transform: translateX(0) translateY(0); }
-            25% { transform: translateX(5px) translateY(-5px); }
-            50% { transform: translateX(10px) translateY(0); }
-            75% { transform: translateX(5px) translateY(5px); }
+            25% { transform: translateX(6px) translateY(-6px); }
+            50% { transform: translateX(12px) translateY(0); }
+            75% { transform: translateX(6px) translateY(6px); }
             100% { transform: translateX(0) translateY(0); }
         }
 
-        /* Componentes Animados */
-        .food-bubble {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background-size: contain;
-            opacity: 0;
-            animation: float 3s infinite;
-        }
-        
-        .sweat-drop {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 15"><path d="M5 0 Q7 5 5 10 Q3 5 5 0" fill="%2366B3FF"/></svg>');
-            opacity: 0;
-            animation: drip 1.5s infinite;
-        }
-        
-        .zzz {
-            position: absolute;
-            font-size: 20px;
-            color: #999;
-            opacity: 0;
-            animation: float 2s infinite;
-        }
-        
-        .aura {
-            position: absolute;
-            width: 120%;
-            height: 120%;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(100,255,100,0.3) 0%, rgba(100,255,100,0) 70%);
-            opacity: 0;
-            animation: pulse 3s infinite;
-        }
-        
-        .typing-finger {
-            position: absolute;
-            width: 10px;
-            height: 20px;
-            background-color: #FFD700;
-            border-radius: 5px;
-            opacity: 0;
-            animation: typing 0.5s infinite, fadeIn 1s forwards;
-        }
-        
-        .notification {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background-color: #F44336;
-            border-radius: 50%;
-            opacity: 0;
-            animation: bounce 1s infinite, fadeIn 1s forwards;
-        }
-        
-        .bird {
-            position: absolute;
-            width: 30px;
-            height: 20px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20"><path d="M0,10 Q15,-10 30,10 Q15,30 0,10" fill="%23333"/></svg>');
-            opacity: 0;
-            animation: fly 3s infinite;
-        }
-        
-        .screen-transition {
-            animation: fadeIn 0.8s ease-out;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
-        /* Telas Específicas */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ================================
+           TELAS ESPECÍFICAS
+           ================================ */
         #screen-start {
             text-align: center;
             display: flex;
@@ -429,20 +565,25 @@
             justify-content: center;
             min-height: calc(100vh - 40px);
             padding: 40px 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
         }
 
         #screen-start h1 {
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 16px;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             animation: fadeIn 1s ease-out;
+            line-height: 1.3;
         }
 
         #screen-start p {
-            font-size: 16px;
+            font-size: 17px;
             color: var(--text-light);
             margin-bottom: 32px;
-            max-width: 400px;
+            max-width: 500px;
             animation: fadeIn 1.2s ease-out;
         }
 
@@ -452,11 +593,15 @@
         }
 
         .screen-title {
-            font-size: 22px;
-            margin-bottom: 16px;
-            color: var(--primary);
+            font-size: 24px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-align: center;
             animation: fadeIn 0.8s ease-out;
+            font-weight: 700;
         }
 
         .screen-subtitle {
@@ -465,6 +610,7 @@
             margin-bottom: 24px;
             text-align: center;
             animation: fadeIn 1s ease-out;
+            font-weight: 500;
         }
 
         #screen-end {
@@ -480,73 +626,184 @@
         }
 
         #screen-end li {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             font-size: 14px;
+            line-height: 1.6;
         }
 
+        /* ================================
+           INDICADOR DE PROGRESSO
+           ================================ */
+        .screen-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .screen-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--progress-bg);
+            transition: var(--transition);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .screen-dot.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            transform: scale(1.3);
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.5);
+        }
+
+        /* ================================
+           LINKS SOCIAIS
+           ================================ */
         .social-links {
-            margin: 24px 0;
+            margin: 32px 0;
             animation: fadeIn 1s ease-out;
+        }
+
+        .social-links p {
+            margin-bottom: 16px;
+            color: var(--text-light);
+            font-weight: 500;
         }
 
         .social-links a {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             margin: 0 8px;
             text-decoration: none;
             transition: var(--transition);
-            animation: bounce 0.8s ease;
+            animation: slideInUp 0.8s ease;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
         }
 
         .social-links a:hover, .social-links a:focus {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
         }
 
+        /* ================================
+           BOTÕES DE AÇÃO
+           ================================ */
         .action-buttons {
-    text-align: center;
-    margin: 30px 0;
-    padding-bottom: 20px;
-}
-
-.action-buttons .btn {
-    margin: 0 10px; /* Espaço entre botões */
-    display: inline-block;
-    width: auto;
-    padding: 12px 24px;
-}
-
-        /* Efeitos de Tempo de Tela */
-        .time-display {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 12px 0;
-            color: var(--text);
-            animation: fadeIn 0.5s ease-out;
+            text-align: center;
+            margin: 32px 0;
+            padding-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
         }
 
-        /* Controles de Acessibilidade */
+        .action-buttons .btn {
+            margin: 0;
+            flex: 0 1 auto;
+            min-width: 160px;
+        }
+
+        /* ================================
+           DICAS PRÁTICAS
+           ================================ */
+        .tips-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin: 28px 0;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .tips-container h3 {
+            margin: 0 0 20px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 20px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        @media (min-width: 600px) {
+            .tips-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .tip-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .tip-card:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .tip-card h4 {
+            margin: 0 0 12px 0;
+            color: var(--primary-dark);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .tip-card ol, .tip-card ul {
+            padding-left: 24px;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .tip-card li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        /* ================================
+           CONTROLES DE ACESSIBILIDADE
+           ================================ */
         .accessibility-controls {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 24px;
+            right: 24px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             z-index: 100;
         }
 
         .accessibility-btn {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             display: flex;
             align-items: center;
@@ -558,98 +815,48 @@
         }
 
         .accessibility-btn:hover, .accessibility-btn:focus {
-            transform: scale(1.1);
+            transform: scale(1.15);
+            box-shadow: var(--shadow-lg);
         }
 
-        /* Dicas práticas */
-        .tips-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin: 25px 0;
-            box-shadow: var(--shadow);
+        .accessibility-btn:active {
+            transform: scale(0.95);
         }
 
-        .tips-container h3 {
-            margin: 0 0 15px 0;
-            color: var(--primary);
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+        /* ================================
+           HELPER CLASSES
+           ================================ */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
         }
 
-        .tips-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        @media (min-width: 600px) {
-            .tips-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .tip-card {
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .tip-card h4 {
-            margin: 0 0 10px 0;
-            color: var(--primary-dark);
-            text-align: center;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tip-card ol, .tip-card ul {
-            padding-left: 20px;
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .tip-card li {
-            margin-bottom: 5px;
-        }
-
-        /* Progresso entre telas */
-        .screen-progress {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .screen-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--progress-bg);
-            transition: var(--transition);
-        }
-
-        .screen-dot.active {
-            background-color: var(--primary);
-            transform: scale(1.2);
-        }
-
-        /* Responsividade */
+        /* ================================
+           RESPONSIVIDADE APRIMORADA
+           ================================ */
         @media (max-width: 480px) {
             #app {
-                padding: 15px;
+                padding: 12px;
             }
 
             .screen {
-                width: calc(100% - 30px);
-                left: 15px;
-                padding: 20px;
+                width: calc(100% - 24px);
+                padding: 24px 20px;
+            }
+
+            #screen-start h1 {
+                font-size: 26px;
+            }
+
+            #screen-start p {
+                font-size: 15px;
             }
 
             #screen-end {
@@ -657,17 +864,12 @@
             }
 
             .message-box {
-                padding: 12px;
-                min-height: 150px;
-            }
-
-            .social-links {
-                margin: 30px 0;
-                padding-bottom: 20px;
+                padding: 16px;
+                min-height: 140px;
             }
 
             .btn {
-                padding: 12px 24px;
+                padding: 14px 24px;
                 font-size: 15px;
             }
 
@@ -677,18 +879,38 @@
             }
 
             .screen-title {
-                font-size: 20px;
+                font-size: 22px;
             }
 
             .accessibility-controls {
-                bottom: 10px;
-                right: 10px;
+                bottom: 16px;
+                right: 16px;
+                gap: 10px;
+            }
+
+            .accessibility-btn {
+                width: 44px;
+                height: 44px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+                max-width: none;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 360px) {
             .screen {
-                padding: 16px;
+                padding: 20px 16px;
             }
 
             .character-container {
@@ -697,24 +919,83 @@
             }
             
             .message-box {
-                min-height: 180px;
+                min-height: 160px;
+                padding: 14px;
             }
         }
 
-        /* Modo de alto contraste */
+        /* ================================
+           MODO DE ALTO CONTRASTE
+           ================================ */
         .high-contrast {
             --text: #FFFFFF;
-            --text-light: #CCCCCC;
+            --text-light: #DDDDDD;
+            --text-lighter: #BBBBBB;
             --text-contrast: #000000;
             --bg: #000000;
+            --bg-secondary: #111111;
             --card-bg: #222222;
             --progress-bg: #444444;
-            --shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+            --shadow-lg: 0 8px 24px rgba(255, 255, 255, 0.2);
         }
 
+        .high-contrast .screen {
+            border: 2px solid var(--primary);
+        }
+
+        .high-contrast .message-box {
+            background: var(--card-bg);
+            border-left-width: 6px;
+        }
+
+        /* ================================
+           REDUÇÃO DE MOVIMENTO
+           ================================ */
         .reduce-motion * {
-            animation: none !important;
-            transition: none !important;
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+
+        /* ================================
+           MELHORIAS DE PERFORMANCE
+           ================================ */
+        .character,
+        .friend,
+        .btn,
+        .screen {
+            will-change: transform, opacity;
+        }
+
+        /* ================================
+           TOOLTIPS
+           ================================ */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-fast);
+            z-index: 1000;
+        }
+
+        [data-tooltip]:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
         }
     </style>
 </head>
@@ -724,12 +1005,14 @@
         <div id="screen-start" class="screen active">
             <h1>Seu celular está te ajudando ou prejudicando?</h1>
             <p>Um jogo interativo baseado em pesquisas científicas sobre o uso de smartphones</p>
-            <button id="start-btn" class="btn pulse">Começar o Teste</button>
+            <button id="start-btn" class="btn pulse" aria-label="Começar o teste interativo">
+                <span>Começar o Teste</span>
+            </button>
         </div>
 
         <!-- Fase 1: Obesidade -->
         <div id="screen-1" class="screen">
-            <div class="screen-progress">
+            <div class="screen-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="6">
                 <div class="screen-dot"></div>
                 <div class="screen-dot"></div>
                 <div class="screen-dot"></div>
@@ -742,31 +1025,30 @@
             
             <div class="character-container">
                 <div class="character" id="character-1" role="img" aria-label="Criança usando celular"></div>
-                <!-- Bolhas de comida -->
-                <div class="food-bubble" id="food1" style="left: 30px; top: 20px;" aria-hidden="true"></div>
-                <div class="food-bubble" id="food2" style="right: 30px; top: 10px;" aria-hidden="true"></div>
+                <div class="food-bubble" id="food1" style="left: 20px; top: 15px;" aria-hidden="true"></div>
+                <div class="food-bubble" id="food2" style="right: 20px; top: 10px;" aria-hidden="true"></div>
             </div>
             
             <div class="progress-container">
                 <div class="progress-label">
                     <span>Tempo de tela</span>
-                    <span id="time-display-1">0 horas</span>
+                    <span id="time-display-1" class="time-display">0 horas</span>
                 </div>
-                <div class="progress-bar">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-fill" id="progress-1"></div>
                 </div>
             </div>
             
-            <button id="add-time-1" class="btn">+ 30 minutos</button>
+            <button id="add-time-1" class="btn" aria-label="Adicionar 30 minutos de tempo de tela">+ 30 minutos</button>
             
-            <div class="message-box" id="message-1">
+            <div class="message-box" id="message-1" role="status" aria-live="polite">
                 <p>Clique no botão para simular o tempo que você passa no celular. Cada clique adiciona 30 minutos de uso.</p>
             </div>
         </div>
 
         <!-- Fase 2: Estresse -->
         <div id="screen-2" class="screen">
-            <div class="screen-progress">
+            <div class="screen-progress" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="6">
                 <div class="screen-dot active"></div>
                 <div class="screen-dot"></div>
                 <div class="screen-dot"></div>
@@ -780,35 +1062,32 @@
             <div class="character-container">
                 <div class="stress-effect" id="stress-effect" aria-hidden="true"></div>
                 <div class="character" id="character-2" role="img" aria-label="Adolescente estressado usando celular"></div>
-                <!-- Gotas de suor -->
-                <div class="sweat-drop" id="sweat1" style="left: 60px; top: 40px;" aria-hidden="true"></div>
-                <div class="sweat-drop" id="sweat2" style="right: 60px; top: 40px;" aria-hidden="true"></div>
-                <!-- Dedo digitando -->
-                <div class="typing-finger" id="typing-finger" style="right: 40px; bottom: 60px;" aria-hidden="true"></div>
-                <!-- Notificação -->
-                <div class="notification" id="notification" style="right: 30px; top: 30px;" aria-hidden="true"></div>
+                <div class="sweat-drop" id="sweat1" style="left: 55px; top: 35px;" aria-hidden="true"></div>
+                <div class="sweat-drop" id="sweat2" style="right: 55px; top: 35px;" aria-hidden="true"></div>
+                <div class="typing-finger" id="typing-finger" style="right: 35px; bottom: 55px;" aria-hidden="true"></div>
+                <div class="notification" id="notification" style="right: 25px; top: 25px;" aria-hidden="true"></div>
             </div>
             
             <div class="progress-container">
                 <div class="progress-label">
                     <span>Tempo de tela</span>
-                    <span id="time-display-2">2 horas</span>
+                    <span id="time-display-2" class="time-display">2 horas</span>
                 </div>
-                <div class="progress-bar">
+                <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-fill" id="progress-2"></div>
                 </div>
             </div>
             
-            <button id="add-time-2" class="btn">+ 30 minutos</button>
+            <button id="add-time-2" class="btn" aria-label="Adicionar 30 minutos de tempo de tela">+ 30 minutos</button>
             
-            <div class="message-box" id="message-2">
+            <div class="message-box" id="message-2" role="status" aria-live="polite">
                 <p>Agora vamos ver como o tempo de tela afeta sua saúde mental. Continue clicando para simular mais tempo no celular.</p>
             </div>
         </div>
 
         <!-- Fase 3: Isolamento -->
         <div id="screen-3" class="screen">
-            <div class="screen-progress">
+            <div class="screen-progress" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="6">
                 <div class="screen-dot active"></div>
                 <div class="screen-dot active"></div>
                 <div class="screen-dot"></div>
@@ -821,32 +1100,31 @@
             
             <div class="character-container">
                 <div class="character" id="character-3" role="img" aria-label="Adolescente isolado usando celular"></div>
-                <div class="friend" id="friend1" style="left: 50px; top: 50px;" role="img" aria-label="Amigo tentando interagir"></div>
-                <div class="friend" id="friend2" style="right: 50px; top: 50px;" role="img" aria-label="Amigo tentando interagir"></div>
-                <!-- Nuvem de solidão -->
-                <div class="aura" id="loneliness" style="background: radial-gradient(circle, rgba(150,150,150,0.2) 0%, rgba(150,150,150,0) 70%);" aria-hidden="true"></div>
+                <div class="friend" id="friend1" style="left: 45px; top: 45px;" role="img" aria-label="Amigo tentando interagir"></div>
+                <div class="friend" id="friend2" style="right: 45px; top: 45px;" role="img" aria-label="Amigo tentando interagir"></div>
+                <div class="aura" id="loneliness" style="background: radial-gradient(circle, rgba(150,150,150,0.25) 0%, rgba(150,150,150,0) 70%);" aria-hidden="true"></div>
             </div>
             
             <div class="progress-container">
                 <div class="progress-label">
                     <span>Tempo de tela</span>
-                    <span id="time-display-3">4 horas</span>
+                    <span id="time-display-3" class="time-display">4 horas</span>
                 </div>
-                <div class="progress-bar">
+                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-fill" id="progress-3"></div>
                 </div>
             </div>
             
-            <button id="add-time-3" class="btn">+ 30 minutos</button>
+            <button id="add-time-3" class="btn" aria-label="Adicionar 30 minutos de tempo de tela">+ 30 minutos</button>
             
-            <div class="message-box" id="message-3">
+            <div class="message-box" id="message-3" role="status" aria-live="polite">
                 <p>Observe como suas relações sociais são afetadas pelo tempo excessivo no celular. As interações reais estão sendo substituídas pelas virtuais.</p>
             </div>
         </div>
 
         <!-- Fase 4: Miopia e Sono -->
         <div id="screen-4" class="screen">
-            <div class="screen-progress">
+            <div class="screen-progress" role="progressbar" aria-valuenow="3" aria-valuemin="0" aria-valuemax="6">
                 <div class="screen-dot active"></div>
                 <div class="screen-dot active"></div>
                 <div class="screen-dot active"></div>
@@ -861,32 +1139,31 @@
                 <div class="character" id="character-4" role="img" aria-label="Adolescente cansado usando celular"></div>
                 <div class="glasses" id="glasses" aria-hidden="true"></div>
                 <div class="sleep-effect" id="sleep-effect" aria-hidden="true"></div>
-                <!-- Efeito zzz -->
-                <div class="zzz" id="zzz1" style="left: 70px; top: 130px;" aria-hidden="true">z</div>
-                <div class="zzz" id="zzz2" style="left: 85px; top: 125px;" aria-hidden="true">z</div>
-                <div class="zzz" id="zzz3" style="left: 100px; top: 130px;" aria-hidden="true">z</div>
+                <div class="zzz" id="zzz1" style="left: 65px; top: 125px;" aria-hidden="true">z</div>
+                <div class="zzz" id="zzz2" style="left: 82px; top: 120px;" aria-hidden="true">z</div>
+                <div class="zzz" id="zzz3" style="left: 99px; top: 125px;" aria-hidden="true">z</div>
             </div>
             
             <div class="progress-container">
                 <div class="progress-label">
                     <span>Tempo de tela</span>
-                    <span id="time-display-4">6 horas</span>
+                    <span id="time-display-4" class="time-display">6 horas</span>
                 </div>
-                <div class="progress-bar">
+                <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-fill" id="progress-4"></div>
                 </div>
             </div>
             
-            <button id="add-time-4" class="btn">+ 30 minutos</button>
+            <button id="add-time-4" class="btn" aria-label="Adicionar 30 minutos de tempo de tela">+ 30 minutos</button>
             
-            <div class="message-box" id="message-4">
+            <div class="message-box" id="message-4" role="status" aria-live="polite">
                 <p>Agora vamos ver os efeitos na sua saúde física. O uso excessivo do celular afeta seus olhos, postura e padrões de sono.</p>
             </div>
         </div>
 
         <!-- Fase Final: Desconexão -->
         <div id="screen-final" class="screen">
-            <div class="screen-progress">
+            <div class="screen-progress" role="progressbar" aria-valuenow="4" aria-valuemin="0" aria-valuemax="6">
                 <div class="screen-dot active"></div>
                 <div class="screen-dot active"></div>
                 <div class="screen-dot active"></div>
@@ -900,21 +1177,22 @@
             <div class="character-container">
                 <div class="aura" id="positive-aura" aria-hidden="true"></div>
                 <div class="character" id="character-final" role="img" aria-label="Adolescente feliz após desconectar"></div>
-                <!-- Pássaros -->
-                <div class="bird" id="bird1" style="left: 20px; top: 20px;" aria-hidden="true"></div>
-                <div class="bird" id="bird2" style="right: 20px; top: 30px;" aria-hidden="true"></div>
+                <div class="bird" id="bird1" style="left: 15px; top: 15px;" aria-hidden="true"></div>
+                <div class="bird" id="bird2" style="right: 15px; top: 25px;" aria-hidden="true"></div>
             </div>
             
-            <button id="disconnect-btn" class="btn btn-secondary">Desconectar por 3 dias</button>
+            <button id="disconnect-btn" class="btn btn-secondary" aria-label="Desconectar por 3 dias">
+                Desconectar por 3 dias
+            </button>
             
-            <div class="message-box" id="message-final">
+            <div class="message-box" id="message-final" role="status" aria-live="polite">
                 <p>Você está pronto para experimentar os benefícios de se desconectar? Mesmo uma pequena pausa pode fazer uma grande diferença.</p>
             </div>
         </div>
 
         <!-- Tela Final -->
         <div id="screen-end" class="screen">
-            <div class="screen-progress">
+            <div class="screen-progress" role="progressbar" aria-valuenow="6" aria-valuemin="0" aria-valuemax="6">
                 <div class="screen-dot active"></div>
                 <div class="screen-dot active"></div>
                 <div class="screen-dot active"></div>
@@ -931,12 +1209,12 @@
             <div class="message-box">
                 <p><strong>Resultados baseados em pesquisas científicas:</strong></p>
                 <ul>
-                    <li><strong>Obesidade:</strong> Jovens com +2h/dia de tela têm o dobro de risco de obesidade. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank" rel="noopener noreferrer">(Estudo canadense)</a></li>
-                    <li><strong>Saúde mental:</strong> +4h/dia aumenta estresse e ideação suicida. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank" rel="noopener noreferrer">(Pesquisa coreana)</a></li>
-                    <li><strong>Saúde física e mental:</strong> Uso excessivo prejudica múltiplos aspectos da saúde. <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank" rel="noopener noreferrer">(Estudo Diário do Povo)</a></li>
-                    <li><strong>Visão:</strong> Cada hora extra de tela aumenta em 21% o risco de miopia. <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank" rel="noopener noreferrer">(Estudo Health.com)</a></li>
-                    <li><strong>Sono:</strong> Telas antes de dormir prejudicam a qualidade do sono. <a href="https://pt.wikipedia.org/wiki/Tempo_de_tela" target="_blank" rel="noopener noreferrer">(Wikipedia)</a></li>
-                    <li><strong>Desconexão:</strong> 2 semanas sem internet móvel melhoram saúde mental. <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank" rel="noopener noreferrer">(NY Post)</a></li>
+                    <li><strong>Obesidade:</strong> Jovens com +2h/dia de tela têm o dobro de risco de obesidade. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank" rel="noopener noreferrer">Estudo canadense</a></li>
+                    <li><strong>Saúde mental:</strong> +4h/dia aumenta estresse e ideação suicida. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank" rel="noopener noreferrer">Pesquisa coreana</a></li>
+                    <li><strong>Saúde física e mental:</strong> Uso excessivo prejudica múltiplos aspectos da saúde. <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank" rel="noopener noreferrer">Estudo Diário do Povo</a></li>
+                    <li><strong>Visão:</strong> Cada hora extra de tela aumenta em 21% o risco de miopia. <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank" rel="noopener noreferrer">Estudo Health.com</a></li>
+                    <li><strong>Sono:</strong> Telas antes de dormir prejudicam a qualidade do sono. <a href="https://pt.wikipedia.org/wiki/Tempo_de_tela" target="_blank" rel="noopener noreferrer">Wikipedia</a></li>
+                    <li><strong>Desconexão:</strong> 2 semanas sem internet móvel melhoram saúde mental. <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank" rel="noopener noreferrer">NY Post</a></li>
                 </ul>
             </div>
 
@@ -972,7 +1250,6 @@
                 <h3><span role="img" aria-label="Celular">📱</span> Como Ver Seu Tempo de Tela</h3>
                 
                 <div class="tips-grid">
-                    <!-- Android -->
                     <div class="tip-card">
                         <h4><span role="img" aria-label="Android">🤖</span> Android</h4>
                         <ol>
@@ -982,7 +1259,6 @@
                         </ol>
                     </div>
                     
-                    <!-- iPhone -->
                     <div class="tip-card">
                         <h4><span role="img" aria-label="iPhone">🍎</span> iPhone</h4>
                         <ol>
@@ -996,35 +1272,34 @@
             
             <div class="social-links">
                 <p>Gostou do teste? Me conte sua experiência ou sugestões!</p>
-                <a href="https://instagram.com/bielcrod" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <a href="https://instagram.com/bielcrod" target="_blank" rel="noopener noreferrer" aria-label="Siga no Instagram" data-tooltip="Instagram">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="white"/>
                     </svg>
                 </a>
-                
             </div>
             
             <div class="action-buttons">
-    <button id="restart-btn" class="btn">Refazer Teste</button>
-    <button id="share-btn" class="btn btn-secondary">Compartilhar</button>
-</div>
+                <button id="restart-btn" class="btn" aria-label="Refazer o teste">Refazer Teste</button>
+                <button id="share-btn" class="btn btn-secondary" aria-label="Compartilhar o teste">Compartilhar</button>
+            </div>
         </div>
 
         <!-- Controles de Acessibilidade -->
-        <div class="accessibility-controls">
-            <button id="sound-toggle" class="accessibility-btn" aria-label="Alternar som" title="Alternar som">
+        <div class="accessibility-controls" role="toolbar" aria-label="Controles de acessibilidade">
+            <button id="sound-toggle" class="accessibility-btn" aria-label="Alternar som" data-tooltip="Som">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                 </svg>
             </button>
-            <button id="contrast-toggle" class="accessibility-btn" aria-label="Alternar alto contraste" title="Alto contraste">
+            <button id="contrast-toggle" class="accessibility-btn" aria-label="Alternar alto contraste" data-tooltip="Contraste">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M12 18a6 6 0 0 0 0-12v12z"></path>
                 </svg>
             </button>
-            <button id="motion-toggle" class="accessibility-btn" aria-label="Reduzir movimento" title="Reduzir animações">
+            <button id="motion-toggle" class="accessibility-btn" aria-label="Reduzir movimento" data-tooltip="Animações">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="8" x2="12" y2="16"></line>
@@ -1034,22 +1309,10 @@
         </div>
     </div>
 
-    <!-- Efeitos Sonoros (Base64 encoded para evitar requests externos) -->
-    <audio id="click-sound" preload="auto">
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
-    </audio>
-    <audio id="notification-sound" preload="auto">
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
-    </audio>
-    <audio id="positive-sound" preload="auto">
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
-    </audio>
-    <audio id="vibration-sound" preload="auto">
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
-    </audio>
-
     <script>
-        // Configurações Globais
+        // ================================
+        // CONFIGURAÇÕES GLOBAIS
+        // ================================
         const config = {
             soundEnabled: true,
             animationSpeed: 0.8,
@@ -1060,11 +1323,13 @@
             vibrationEnabled: 'vibrate' in navigator
         };
 
-        // Estado do Jogo
+        // ================================
+        // ESTADO DO JOGO
+        // ================================
         const gameState = {
             currentScreen: 0,
             time: 0,
-            maxTime: 8, // 8 horas = 16 cliques de 30min
+            maxTime: 8,
             screens: [
                 "screen-start",
                 "screen-1",
@@ -1076,7 +1341,9 @@
             ]
         };
 
-        // Elementos DOM
+        // ================================
+        // ELEMENTOS DOM
+        // ================================
         const dom = {
             startBtn: document.getElementById("start-btn"),
             restartBtn: document.getElementById("restart-btn"),
@@ -1124,10 +1391,6 @@
             soundToggle: document.getElementById("sound-toggle"),
             contrastToggle: document.getElementById("contrast-toggle"),
             motionToggle: document.getElementById("motion-toggle"),
-            clickSound: document.getElementById("click-sound"),
-            notificationSound: document.getElementById("notification-sound"),
-            positiveSound: document.getElementById("positive-sound"),
-            vibrationSound: document.getElementById("vibration-sound"),
             food1: document.getElementById("food1"),
             food2: document.getElementById("food2"),
             sweat1: document.getElementById("sweat1"),
@@ -1143,19 +1406,17 @@
             bird2: document.getElementById("bird2")
         };
 
-        // SVG Strings para cada personagem
+        // ================================
+        // SVG DOS PERSONAGENS
+        // ================================
         const characterSVGs = {
-            // Fase 1 - Criança (3 estados)
             child_normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="80" fill="#FFD700"/>
-                <!-- Rosto -->
                 <circle cx="70" cy="80" r="10" fill="#333"/>
                 <circle cx="130" cy="80" r="10" fill="#333"/>
                 <path d="M80,120 Q100,140 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-                <!-- Detalhes -->
                 <circle cx="100" cy="110" r="5" fill="#FF8A65"/>
                 <path d="M95,95 L105,95" stroke="#333" stroke-width="2"/>
-                <!-- Corpo -->
                 <path d="M100,120 L100,160" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L120,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
@@ -1165,173 +1426,142 @@
             
             child_happy: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="80" fill="#FFD700"/>
-                <!-- Rosto feliz -->
                 <circle cx="70" cy="80" r="8" fill="#333"/>
                 <circle cx="130" cy="80" r="8" fill="#333"/>
                 <path d="M80,120 Q100,150 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-                <!-- Bochechas -->
                 <circle cx="85" cy="100" r="10" fill="#FF8A65"/>
                 <circle cx="115" cy="100" r="10" fill="#FF8A65"/>
-                <!-- Corpo -->
                 <path d="M100,120 L100,160" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L120,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,160 L80,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,160 L120,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
-                <!-- Comida na mão -->
                 <circle cx="75" cy="150" r="15" fill="#FF5252"/>
             </svg>`,
             
             child_overweight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                <!-- Corpo maior -->
                 <circle cx="100" cy="110" r="90" fill="#FFD700"/>
-                <!-- Rosto preocupado -->
                 <circle cx="70" cy="80" r="8" fill="#333"/>
                 <circle cx="130" cy="80" r="8" fill="#333"/>
                 <path d="M80,110 Q100,120 120,110" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-                <!-- Mãos segurando comida -->
                 <path d="M50,130 L70,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M150,130 L130,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
-                <!-- Pernas mais grossas -->
                 <path d="M100,160 L80,190" stroke="#333" stroke-width="6" stroke-linecap="round"/>
                 <path d="M100,160 L120,190" stroke="#333" stroke-width="6" stroke-linecap="round"/>
-                <!-- Comida -->
                 <circle cx="65" cy="150" r="15" fill="#FF5252"/>
                 <circle cx="135" cy="150" r="12" fill="#FFD180"/>
             </svg>`,
 
-            // Fase 2 - Adolescente estressado
             teen_stressed: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="80" fill="#FFA07A"/>
-                <!-- Olheiras -->
                 <ellipse cx="70" cy="80" rx="10" ry="8" fill="#555"/>
                 <ellipse cx="130" cy="80" rx="10" ry="8" fill="#555"/>
                 <circle cx="70" cy="80" r="5" fill="#333"/>
                 <circle cx="130" cy="80" r="5" fill="#333"/>
-                <!-- Boca tensa -->
                 <path d="M80,120 L120,120" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-                <!-- Celular na mão -->
                 <rect x="130" y="130" width="30" height="50" rx="3" fill="#333"/>
                 <rect x="135" y="135" width="20" height="40" fill="#2196F3"/>
-                <!-- Corpo -->
                 <path d="M100,120 L100,170" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,170 L80,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,170 L120,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
             </svg>`,
 
-            // Fase 3 - Isolamento
             teen_isolated: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="80" fill="#ADD8E6"/>
-                <!-- Olhos cansados -->
                 <path d="M65,80 Q70,85 75,80" fill="none" stroke="#333" stroke-width="2"/>
                 <path d="M125,80 Q130,85 135,80" fill="none" stroke="#333" stroke-width="2"/>
-                <!-- Boca triste -->
                 <path d="M80,120 Q100,110 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-                <!-- Celular -->
                 <rect x="110" y="120" width="35" height="60" rx="3" fill="#333"/>
                 <rect x="115" y="125" width="25" height="50" fill="#2196F3"/>
-                <!-- Corpo curvado -->
                 <path d="M100,120 Q110,150 100,180" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,150 L80,160" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,180 L80,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,180 L120,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
             </svg>`,
 
-            // Fase 4 - Miopia e cansaço
             teen_tired: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="80" fill="#E6E6FA"/>
-                <!-- Olhos vermelhos -->
                 <circle cx="70" cy="80" r="10" fill="#FF5252"/>
                 <circle cx="130" cy="80" r="10" fill="#FF5252"/>
                 <circle cx="70" cy="80" r="5" fill="#333"/>
                 <circle cx="130" cy="80" r="5" fill="#333"/>
-                <!-- Boca aberta (bocejo) -->
                 <ellipse cx="100" cy="120" rx="15" ry="10" fill="#333"/>
-                <!-- Corpo -->
                 <path d="M100,120 L100,170" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L80,150" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,170 L80,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,170 L120,190" stroke="#333" stroke-width="4" stroke-linecap="round"/>
-                <!-- Celular na cama -->
                 <rect x="120" y="150" width="30" height="50" rx="3" fill="#333"/>
             </svg>`,
 
-            // Fase Final - Feliz
             teen_happy: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="80" fill="#98FB98"/>
-                <!-- Olhos abertos -->
                 <circle cx="70" cy="80" r="10" fill="white" stroke="#333" stroke-width="2"/>
                 <circle cx="130" cy="80" r="10" fill="white" stroke="#333" stroke-width="2"/>
                 <circle cx="70" cy="80" r="5" fill="#333"/>
                 <circle cx="130" cy="80" r="5" fill="#333"/>
-                <!-- Sorriso -->
                 <path d="M80,120 Q100,150 120,120" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
-                <!-- Corpo ativo -->
                 <path d="M100,120 L100,170" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L70,130" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,140 L130,130" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,170 L80,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100,170 L120,200" stroke="#333" stroke-width="4" stroke-linecap="round"/>
-                <!-- Livro na mão -->
                 <rect x="65" y="125" width="20" height="25" fill="#795548" rx="2"/>
                 <line x1="65" y1="135" x2="85" y2="135" stroke="white" stroke-width="1"/>
             </svg>`,
 
-            // Amigos
             friend1: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
                 <circle cx="25" cy="25" r="20" fill="#FFB6C1"/>
-                <!-- Rosto -->
                 <circle cx="18" cy="20" r="3" fill="#333"/>
                 <circle cx="32" cy="20" r="3" fill="#333"/>
                 <path d="M18,30 Q25,35 32,30" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
-                <!-- Corpo -->
                 <path d="M25,35 L25,45" stroke="#333" stroke-width="2" stroke-linecap="round"/>
             </svg>`,
 
             friend2: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
                 <circle cx="25" cy="25" r="20" fill="#98FB98"/>
-                <!-- Rosto -->
                 <circle cx="18" cy="20" r="3" fill="#333"/>
                 <circle cx="32" cy="20" r="3" fill="#333"/>
                 <path d="M18,30 Q25,35 32,30" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
-                <!-- Corpo -->
                 <path d="M25,35 L25,45" stroke="#333" stroke-width="2" stroke-linecap="round"/>
                 <path d="M25,40 L15,35" stroke="#333" stroke-width="2" stroke-linecap="round"/>
             </svg>`
         };
 
-        // Mensagens do Jogo (com links atualizados)
+        // ================================
+        // MENSAGENS DO JOGO
+        // ================================
         const messages = {
             start: [
                 "Clique no botão para simular o tempo que você passa no celular. Cada clique adiciona 30 minutos de uso.",
                 "1 hora: Você já está passando tempo demais no celular! Estudos mostram que o uso excessivo pode levar a hábitos alimentares pouco saudáveis.",
-                `2 horas: <strong>Alerta vermelho!</strong> Pesquisas no Canadá mostram que jovens com mais de 2 horas por dia de tempo de tela têm o DOBRO de risco de desenvolver obesidade! O tempo passivo no celular reduz a atividade física e aumenta o consumo de alimentos pouco saudáveis. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank" rel="noopener noreferrer">(Estudo canadense)</a>`
+                `2 horas: <strong>Alerta vermelho!</strong> Pesquisas no Canadá mostram que jovens com mais de 2 horas por dia de tempo de tela têm o DOBRO de risco de desenvolver obesidade! O tempo passivo no celular reduz a atividade física e aumenta o consumo de alimentos pouco saudáveis. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9896672/" target="_blank" rel="noopener noreferrer">Estudo canadense</a>`
             ],
             stress: [
                 "Agora vamos ver como o tempo de tela afeta sua saúde mental. Continue clicando para simular mais tempo no celular.",
                 "3 horas: Você está começando a sentir os efeitos? O uso excessivo de smartphones está ligado ao aumento dos níveis de cortisol, o hormônio do estresse.",
-                `4 horas: <strong>Dados alarmantes!</strong> Uma pesquisa na Coreia do Sul com mais de 50.000 adolescentes descobriu que aqueles que usam smartphones por mais de 4 horas por dia têm taxas significativamente maiores de ideação suicida, estresse e uso de substâncias. O isolamento digital pode ser tão prejudicial quanto o físico. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank" rel="noopener noreferrer">(Pesquisa coreana)</a>`
+                `4 horas: <strong>Dados alarmantes!</strong> Uma pesquisa na Coreia do Sul com mais de 50.000 adolescentes descobriu que aqueles que usam smartphones por mais de 4 horas por dia têm taxas significativamente maiores de ideação suicida, estresse e uso de substâncias. O isolamento digital pode ser tão prejudicial quanto o físico. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8872507/" target="_blank" rel="noopener noreferrer">Pesquisa coreana</a>`
             ],
             isolation: [
                 "Observe como suas relações sociais são afetadas pelo tempo excessivo no celular. As interações reais estão sendo substituídas pelas virtuais.",
                 "5 horas: Seus amigos e familiares estão começando a se afastar. A comunicação digital não substitui o contato humano face a face.",
-                `6 horas: <strong>Impacto social comprovado!</strong> Estudos brasileiros mostram que o uso excessivo do celular reduz a qualidade de vida em múltiplos aspectos, incluindo as relações sociais e a saúde física. O tempo que você passa olhando para a tela é tempo que não está investindo em relações significativas. <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank" rel="noopener noreferrer">(Estudo Diário do Povo)</a>`
+                `6 horas: <strong>Impacto social comprovado!</strong> Estudos brasileiros mostram que o uso excessivo do celular reduz a qualidade de vida em múltiplos aspectos, incluindo as relações sociais e a saúde física. O tempo que você passa olhando para a tela é tempo que não está investindo em relações significativas. <a href="https://diario.dopovo.com.br/2025/01/28/uso-excessivo-de-celular-pode-prejudicar-saude-fisica-e-mental-apontam-estudos/" target="_blank" rel="noopener noreferrer">Estudo Diário do Povo</a>`
             ],
             health: [
                 "Agora vamos ver os efeitos na sua saúde física. O uso excessivo do celular afeta seus olhos, postura e padrões de sono.",
                 "7 horas: Seus olhos estão ficando cansados e secos. A luz azul das telas pode estar perturbando seu ritmo circadiano.",
-                `8 horas: <strong>Problemas visuais em ascensão!</strong> Cada hora adicional de tempo de tela por dia aumenta em 21% o risco de desenvolver miopia em crianças e adolescentes. Além disso, o uso noturno de smartphones está diretamente ligado à má qualidade do sono, que por sua vez afeta todos os aspectos da saúde. <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank" rel="noopener noreferrer">(Estudo Health.com)</a>`
+                `8 horas: <strong>Problemas visuais em ascensão!</strong> Cada hora adicional de tempo de tela por dia aumenta em 21% o risco de desenvolver miopia em crianças e adolescentes. Além disso, o uso noturno de smartphones está diretamente ligado à má qualidade do sono, que por sua vez afeta todos os aspectos da saúde. <a href="https://www.health.com/screen-time-higher-risk-of-nearsightedness-myopia-11691977" target="_blank" rel="noopener noreferrer">Estudo Health.com</a>`
             ],
             disconnect: [
                 "Você está pronto para experimentar os benefícios de se desconectar? Mesmo uma pequena pausa pode fazer uma grande diferença.",
-                `3 dias sem celular: <strong>Transformação impressionante!</strong> Pesquisas mostram que apenas 2 semanas reduzindo o uso de smartphones podem reorganizar seu cérebro, reequilibrando os sistemas de dopamina e serotonina. Os participantes relatam melhor humor, menos ansiedade e mais produtividade. Que tal tentar? <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank" rel="noopener noreferrer">(NY Post)</a>`
+                `3 dias sem celular: <strong>Transformação impressionante!</strong> Pesquisas mostram que apenas 2 semanas reduzindo o uso de smartphones podem reorganizar seu cérebro, reequilibrando os sistemas de dopamina e serotonina. Os participantes relatam melhor humor, menos ansiedade e mais produtividade. Que tal tentar? <a href="https://nypost.com/2025/02/21/health/using-this-smartphone-setting-for-two-weeks-can-boost-mental-health/" target="_blank" rel="noopener noreferrer">NY Post</a>`
             ]
         };
 
-        // Inicialização do Jogo
+        // ================================
+        // INICIALIZAÇÃO
+        // ================================
         function initGame() {
-            // Event Listeners
             dom.startBtn.addEventListener("click", startGame);
             dom.restartBtn.addEventListener("click", resetGame);
             dom.shareBtn.addEventListener("click", shareResults);
@@ -1340,25 +1570,16 @@
             dom.contrastToggle.addEventListener("click", toggleContrast);
             dom.motionToggle.addEventListener("click", toggleMotion);
 
-            // Botões de adicionar tempo
             dom.addTimeBtns.forEach((btn, index) => {
                 btn.addEventListener("click", () => handleAddTime(index));
             });
 
-            // Verificar preferências de acessibilidade
             checkAccessibilityPreferences();
-
-            // Inicializar personagens e elementos
             initCharacters();
             initFoodBubbles();
             initFriends();
-
-            // Verificar suporte a áudio e vibração
-            checkAudioSupport();
-            checkVibrationSupport();
         }
 
-        // Inicializar personagens
         function initCharacters() {
             dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_normal)}")`;
             dom.characters[1].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.teen_stressed)}")`;
@@ -1368,28 +1589,26 @@
             dom.characters[5].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.teen_happy)}")`;
         }
 
-        // Inicializar bolhas de comida
         function initFoodBubbles() {
             dom.food1.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#FF5252"/><path d="M12,15 Q20,5 28,15 Q25,25 20,30 Q15,25 12,15" fill="#FF8A80"/></svg>')}")`;
             dom.food2.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="M20,5 Q30,15 20,25 Q10,15 20,5" fill="#FFD180"/><circle cx="15" cy="15" r="3" fill="#795548"/><circle cx="25" cy="15" r="3" fill="#795548"/></svg>')}")`;
         }
 
-        // Inicializar amigos
         function initFriends() {
             dom.friend1.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.friend1)}")`;
             dom.friend2.style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.friend2)}")`;
         }
 
-        // Funções do Jogo
+        // ================================
+        // FUNÇÕES DO JOGO
+        // ================================
         function startGame() {
-            playSound('click');
             vibrate(50);
             showScreen(1);
             updateGameState();
         }
 
         function resetGame() {
-            playSound('click');
             vibrate(50);
             gameState.time = 0;
             gameState.currentScreen = 0;
@@ -1397,7 +1616,6 @@
             updateGameState();
             showScreen(0);
             
-            // Resetar todos os botões
             dom.addTimeBtns.forEach(btn => {
                 btn.textContent = "+ 30 minutos";
                 btn.disabled = false;
@@ -1436,29 +1654,23 @@
 
         function handleAddTime(phaseIndex) {
             if (config.waitingForClick) {
-                // Se estiver esperando confirmação, avança para próxima fase
                 config.waitingForClick = false;
                 dom.addTimeBtns[phaseIndex].textContent = "+ 30 minutos";
                 checkPhaseTransition(phaseIndex);
                 return;
             }
             
-            playSound('click');
             vibrate(50);
-            gameState.time += 0.5; // +30min
+            gameState.time += 0.5;
             
-            // Atualizar interface
             updateProgress();
             updateTimeDisplay();
             updateAnimations(phaseIndex);
             
-            // Verificar se deve mostrar mensagem importante
             const importantTimes = [2, 4, 6, 8];
             if (importantTimes.includes(gameState.time)) {
                 updateMessages(phaseIndex);
                 config.waitingForClick = true;
-                
-                // Mudar texto do botão
                 dom.addTimeBtns[phaseIndex].textContent = "Continuar";
             } else {
                 updateMessages(phaseIndex);
@@ -1467,55 +1679,36 @@
 
         function handleDisconnect() {
             if (config.waitingForClick) {
-                // Segundo clique - mostrar resultados
                 showScreen(6);
                 config.waitingForClick = false;
                 return;
             }
             
-            playSound('positive');
             vibrate([100, 50, 100]);
             dom.messageBoxes[4].innerHTML = `<p>${messages.disconnect[1]}</p>`;
             
-            // Ativar efeitos positivos
             dom.positiveAura.style.animation = "fadeIn 1s forwards, pulse 2s infinite";
             dom.bird1.style.animation = "fadeIn 1s forwards, float 3s infinite";
             dom.bird2.style.animation = "fadeIn 1s 0.5s forwards, float 3s infinite 0.5s";
             
-            // Mudar o botão para exigir confirmação
             dom.disconnectBtn.textContent = "Ver Resultados";
             config.waitingForClick = true;
         }
 
         function showScreen(screenIndex) {
-            // Esconder todas as telas
             gameState.screens.forEach(screen => {
                 document.getElementById(screen).classList.remove('active');
             });
             
-            // Mostrar tela atual
             const currentScreen = document.getElementById(gameState.screens[screenIndex]);
             currentScreen.classList.add('active');
             
-            if (!config.reducedMotion) {
-                currentScreen.classList.add('screen-transition');
-            }
-            
             gameState.currentScreen = screenIndex;
-            
-            // Atualizar indicador de progresso
             updateScreenDots(screenIndex);
             
-            // Efeito visual ao mudar de tela
             if (screenIndex > 0) {
-                playSound('notification');
                 vibrate(30);
             }
-            
-            // Remover classe de transição após animação
-            setTimeout(() => {
-                currentScreen.classList.remove('screen-transition');
-            }, 800);
         }
 
         function updateScreenDots(currentScreen) {
@@ -1527,7 +1720,6 @@
         function updateProgress() {
             const progressPercentage = (gameState.time / gameState.maxTime) * 100;
             
-            // Atualizar todas as barras de progresso visíveis
             dom.progressBars.forEach(bar => {
                 if (bar.parentElement.parentElement.parentElement.classList.contains('active')) {
                     bar.style.width = `${progressPercentage}%`;
@@ -1538,7 +1730,6 @@
         function updateTimeDisplay() {
             const timeText = `${gameState.time} hora${gameState.time !== 1 ? 's' : ''}`;
             
-            // Atualizar todos os displays de tempo visíveis
             dom.timeDisplays.forEach(display => {
                 if (display.parentElement.parentElement.parentElement.classList.contains('active')) {
                     display.textContent = timeText;
@@ -1550,34 +1741,27 @@
             if (config.reducedMotion) return;
             
             switch(phaseIndex) {
-                case 0: // Fase 1 - Obesidade
+                case 0:
                     if (gameState.time >= 1) {
-                        // Transição para feliz ao comer
                         dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_happy)}")`;
-                        // Ativar bolhas de comida
                         dom.food1.style.animation = "float 3s infinite, fadeIn 1s forwards";
                         dom.food2.style.animation = "float 3s infinite 0.5s, fadeIn 1s forwards";
                     }
                     if (gameState.time >= 2) {
-                        // Transição para acima do peso
                         dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_overweight)}")`;
                         dom.characters[0].classList.add('pulse');
                     }
                     break;
                     
-                case 1: // Fase 2 - Estresse
+                case 1:
                     if (gameState.time >= 3) {
-                        // Ativar gotas de suor
                         dom.sweat1.style.animation = "fadeIn 1s forwards, drip 1.5s infinite";
                         dom.sweat2.style.animation = "fadeIn 1s 0.3s forwards, drip 1.5s infinite 0.3s";
                         dom.stressEffect.style.background = "rgba(255,0,0,0.1)";
-                        // Ativar dedo digitando
                         dom.typingFinger.style.animation = "typing 0.5s infinite, fadeIn 1s forwards";
-                        // Notificação
                         dom.notification.style.animation = "bounce 1s infinite, fadeIn 1s forwards";
                     }
                     if (gameState.time >= 4) {
-                        // Aumentar efeito de estresse
                         dom.stressEffect.style.background = "rgba(255,0,0,0.3)";
                         dom.characters[1].classList.add('shake');
                         setTimeout(() => {
@@ -1586,45 +1770,36 @@
                     }
                     break;
                     
-                case 2: // Fase 3 - Isolamento
+                case 2:
                     if (gameState.time >= 5) {
-                        // Amigos começam a se afastar
                         dom.friend1.style.left = "10px";
                         dom.friend1.style.opacity = "0.5";
                         dom.friend2.style.right = "10px";
                         dom.friend2.style.opacity = "0.5";
-                        // Nuvem de solidão
                         dom.loneliness.style.animation = "fadeIn 1s forwards";
                     }
                     if (gameState.time >= 6) {
-                        // Amigos saem de cena
                         dom.friend1.style.left = "-50px";
                         dom.friend1.style.opacity = "0";
                         dom.friend2.style.right = "-50px";
                         dom.friend2.style.opacity = "0";
-                        // Nuvem de solidão mais densa
                         dom.loneliness.style.opacity = "0.3";
                     }
                     break;
                     
-                case 3: // Fase 4 - Miopia e Sono
+                case 3:
                     if (gameState.time >= 7) {
-                        // Óculos aparecem
                         dom.glasses.style.opacity = "0.7";
                         dom.glasses.style.animation = "fadeIn 1s forwards, wobble 2s infinite";
-                        // Efeito de sono
                         dom.sleepEffect.style.opacity = "1";
                         dom.sleepEffect.style.top = "40px";
                         dom.sleepEffect.style.left = "85px";
-                        // Efeito zzz
                         dom.zzz1.style.animation = "fadeIn 1s forwards, float 2s infinite";
                         dom.zzz2.style.animation = "fadeIn 1s 0.3s forwards, float 2s infinite 0.3s";
                         dom.zzz3.style.animation = "fadeIn 1s 0.6s forwards, float 2s infinite 0.6s";
                     }
                     if (gameState.time >= 8) {
-                        // Óculos mais visíveis
                         dom.glasses.style.opacity = "1";
-                        // Ajustar posição do efeito de sono
                         dom.sleepEffect.style.top = "30px";
                         dom.sleepEffect.style.left = "75px";
                         dom.sleepEffect.classList.add('blink');
@@ -1651,10 +1826,9 @@
                 messageIndex = gameState.time >= 8 ? 2 : gameState.time >= 7 ? 1 : 0;
             }
             
-            // Efeito de fade out e fade in para a mensagem
             const messageBox = dom.messageBoxes[phaseIndex];
             messageBox.style.animation = 'none';
-            void messageBox.offsetWidth; // Trigger reflow
+            void messageBox.offsetWidth;
             
             if (!config.reducedMotion) {
                 messageBox.style.animation = 'fadeIn 0.8s ease-out';
@@ -1676,18 +1850,16 @@
         }
 
         function resetAnimations() {
-            // Resetar personagens
             dom.characters.forEach(char => {
                 char.style.transform = "scale(1)";
                 char.classList.remove('shake', 'pulse');
             });
             dom.characters[0].style.backgroundImage = `url("data:image/svg+xml;utf8,${encodeURIComponent(characterSVGs.child_normal)}")`;
             
-            // Resetar efeitos
             dom.stressEffect.style.background = "rgba(255,0,0,0)";
-            dom.friend1.style.left = "50px";
+            dom.friend1.style.left = "45px";
             dom.friend1.style.opacity = "1";
-            dom.friend2.style.right = "50px";
+            dom.friend2.style.right = "45px";
             dom.friend2.style.opacity = "1";
             dom.glasses.style.opacity = "0";
             dom.glasses.style.animation = "none";
@@ -1697,19 +1869,16 @@
             dom.positiveAura.style.opacity = "0";
             dom.positiveAura.style.animation = "none";
             
-            // Resetar elementos animados
             [dom.food1, dom.food2, dom.sweat1, dom.sweat2, dom.typingFinger, 
              dom.notification, dom.zzz1, dom.zzz2, dom.zzz3, dom.bird1, dom.bird2].forEach(el => {
                 el.style.animation = "none";
                 el.style.opacity = "0";
             });
             
-            // Resetar barras de progresso
             dom.progressBars.forEach(bar => {
                 bar.style.width = "0%";
             });
             
-            // Resetar pontos de progresso
             updateScreenDots(0);
         }
 
@@ -1718,81 +1887,38 @@
             updateTimeDisplay();
         }
 
-        // Funções de Acessibilidade
+        // ================================
+        // ACESSIBILIDADE
+        // ================================
         function toggleSound() {
             config.soundEnabled = !config.soundEnabled;
-            dom.soundToggle.innerHTML = config.soundEnabled ? 
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>' :
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>';
-            
-            // Feedback visual
-            dom.soundToggle.style.backgroundColor = config.soundEnabled ? "rgba(0, 0, 0, 0.7)" : "rgba(255, 0, 0, 0.7)";
+            dom.soundToggle.style.backgroundColor = config.soundEnabled ? "" : "rgba(255, 0, 0, 0.7)";
             vibrate(50);
         }
 
         function toggleContrast() {
             config.highContrast = !config.highContrast;
             document.body.classList.toggle('high-contrast', config.highContrast);
-            
-            dom.contrastToggle.innerHTML = config.highContrast ?
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M12 2a10 10 0 0 1 0 20"></path></svg>' :
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 18a6 6 0 0 0 0-12v12z"></path></svg>';
-            
-            dom.contrastToggle.style.backgroundColor = config.highContrast ? "rgba(255, 255, 0, 0.7)" : "rgba(0, 0, 0, 0.7)";
+            dom.contrastToggle.style.backgroundColor = config.highContrast ? "rgba(255, 255, 0, 0.7)" : "";
             vibrate(50);
         }
 
         function toggleMotion() {
             config.reducedMotion = !config.reducedMotion;
             document.body.classList.toggle('reduce-motion', config.reducedMotion);
-            
-            dom.motionToggle.innerHTML = config.reducedMotion ?
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>' :
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20M12 2a10 10 0 0 1 0 20"></path></svg>';
-            
-            dom.motionToggle.style.backgroundColor = config.reducedMotion ? "rgba(255, 0, 0, 0.7)" : "rgba(0, 0, 0, 0.7)";
+            dom.motionToggle.style.backgroundColor = config.reducedMotion ? "rgba(255, 0, 0, 0.7)" : "";
             vibrate(50);
         }
 
         function checkAccessibilityPreferences() {
-            // Verificar preferência de redução de movimento
             const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
             if (motionQuery.matches) {
                 toggleMotion();
             }
             
-            // Verificar preferência de alto contraste
             const contrastQuery = window.matchMedia('(prefers-contrast: more)');
             if (contrastQuery.matches) {
                 toggleContrast();
-            }
-        }
-
-        // Funções de Feedback
-        function playSound(type) {
-            if (!config.soundEnabled) return;
-            
-            try {
-                switch(type) {
-                    case 'click':
-                        dom.clickSound.currentTime = 0;
-                        dom.clickSound.play();
-                        break;
-                    case 'notification':
-                        dom.notificationSound.currentTime = 0;
-                        dom.notificationSound.play();
-                        break;
-                    case 'positive':
-                        dom.positiveSound.currentTime = 0;
-                        dom.positiveSound.play();
-                        break;
-                    case 'vibration':
-                        dom.vibrationSound.currentTime = 0;
-                        dom.vibrationSound.play();
-                        break;
-                }
-            } catch (e) {
-                if (config.debugMode) console.error("Erro ao reproduzir som:", e);
             }
         }
 
@@ -1810,29 +1936,9 @@
             }
         }
 
-        function checkAudioSupport() {
-            try {
-                const canPlay = dom.clickSound.canPlayType('audio/mpeg');
-                if (canPlay === 'probably' || canPlay === 'maybe') {
-                    config.soundEnabled = true;
-                } else {
-                    config.soundEnabled = false;
-                    dom.soundToggle.style.display = 'none';
-                }
-            } catch (e) {
-                config.soundEnabled = false;
-                dom.soundToggle.style.display = 'none';
-                if (config.debugMode) console.error("Navegador não suporta áudio:", e);
-            }
-        }
-
-        function checkVibrationSupport() {
-            if (!('vibrate' in navigator)) {
-                config.vibrationEnabled = false;
-            }
-        }
-
-        // Iniciar o jogo quando o DOM estiver pronto
+        // ================================
+        // INICIAR
+        // ================================
         document.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
